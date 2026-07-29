@@ -10,9 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ImagePlus } from "lucide-react";
+import { ImagePlus, KeyRound, Mail, Phone, UserRoundPen } from "lucide-react";
 import Link from "next/link";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { registerActions } from "../_actions/authActions";
 
 const RegisterForm = () => {
@@ -26,13 +26,8 @@ const RegisterForm = () => {
     }
   };
 
-
-
   return (
-     <form 
-     action={registerActions}
-     className="space-y-4">
-   
+    <form action={registerActions} className="space-y-4">
       <Card className="p-5 ">
         {/* Profile Image */}
         <div className="flex flex-col items-center ">
@@ -63,64 +58,83 @@ const RegisterForm = () => {
             Upload profile photo
           </span>
         </div>
-
-        <div>
+        {/* Name  */}
+        <div className="space-y-2">
           <label
             htmlFor="name"
-            className="block text-xs font-medium text-muted-foreground"
+            className="block text-sm font-medium text-muted-foreground"
           >
             Full Name
           </label>
-          <Input
-            name="name"
-            type="text"
-            placeholder="Your Name "
-            required
-          />
-        </div>
 
-        <div>
+          <div className="relative">
+            <UserRoundPen className="absolute left-3 top-3 h-5 w-5 text-muted-foreground pointer-events-none" />
+            <Input
+              name="name"
+              type="text"
+              placeholder="Your Name "
+              className="pl-10 h-11"
+              required
+            />
+          </div>
+        </div>
+        {/* Email  */}
+        <div className="space-y-2">
           <label
             htmlFor="email"
-            className="block text-xs font-medium text-muted-foreground"
+            className="block text-sm font-medium text-muted-foreground"
           >
-            Email
+            Your Email
           </label>
-          <Input
-            name="email"
-            type="email"
-            placeholder="you@example.com"
-            required
-          />
+          <div className="relative">
+            <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground pointer-events-none" />
+            <Input
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              className="pl-10 h-11"
+              required
+            />
+          </div>
         </div>
 
-        <div>
+        <div className="space-y-2">
           <label
             htmlFor="phone"
             className="block text-xs font-medium text-muted-foreground"
           >
             Phone Number
           </label>
-          <Input
-            name="phone"
-            type="tel"
-            placeholder="123456789"
-          />
+          <div className="relative">
+            <Phone className="absolute left-3 top-3 h-5 w-5 text-muted-foreground pointer-events-none" />
+            <Input
+              name="phone"
+              type="tel"
+              placeholder="123456789"
+              className="pl-10 h-11"
+              required
+            />
+          </div>
         </div>
 
-        <div>
+        <div className="space-y-2">
           <label
             htmlFor="password"
             className="block text-xs font-medium text-muted-foreground"
           >
             Password
           </label>
-          <Input
-            name="password"
-            type="password"
-            placeholder="••••••••"
-            required
-          />
+
+          <div className="relative">
+            <KeyRound className="absolute left-3 top-3 h-5 w-5 text-muted-foreground pointer-events-none" />
+            <Input
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              className="pl-10 h-11"
+              required
+            />
+          </div>
         </div>
 
         <div>
@@ -130,16 +144,18 @@ const RegisterForm = () => {
           >
             Role
           </label>
-          <Select name="role" value={role} onValueChange={setRole}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a role" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="TENANT">Tenant</SelectItem>
-              <SelectItem value="LANDLORD">Landlord</SelectItem>
-              <SelectItem value="ADMIN">Admin</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="relative ">
+              <Select name="role" value={role} onValueChange={setRole}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="TENANT">Tenant</SelectItem>
+                  <SelectItem value="LANDLORD">Landlord</SelectItem>
+                  <SelectItem value="ADMIN">Admin</SelectItem>
+                </SelectContent>
+              </Select>
+          </div>
         </div>
 
         <Button type="submit" className="w-full">

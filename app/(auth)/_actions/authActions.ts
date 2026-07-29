@@ -26,5 +26,12 @@ export const loginActions = async (formdata: FormData) => {
 
 // register
 export const registerActions = async (formdata: FormData) => {
-  console.log(formdata);
+  const name = formdata.get("name");
+  const email = formdata.get("email");
+  const password = formdata.get("password");
+  const phone = formdata.get("phone");
+  const profileImage = formdata.get("profileImage");
+  const role = formdata.get("role");
+  
+
 };

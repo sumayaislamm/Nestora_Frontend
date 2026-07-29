@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { ImagePlus } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 const RegisterForm = () => {
   const [role, setRole] = useState("TENANT");
@@ -25,8 +25,11 @@ const RegisterForm = () => {
     }
   };
 
+
+
   return (
-    <form className="space-y-4">
+     <form className="space-y-4">
+   
       <Card className="p-5 ">
         {/* Profile Image */}
         <div className="flex flex-col items-center space-y-2">

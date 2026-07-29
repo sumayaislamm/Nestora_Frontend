@@ -6,11 +6,25 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { loginActions } from "../_actions/authActions";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 const LoginForm = () => {
+  const [state, action, pending] = useActionState(loginActions, false);
+
+  useEffect(() =>{
+    if(!state) return;
+    if(state.success){
+          toast.success(state.message || "Login Successful!")
+    }
+    if(!state.success){
+              toast.error(state.message || "Login Failed!")
+    }
+
+  }, [state])
   return (
     <form 
-    action={loginActions}
+    action={action}
     className="w-full space-y-6">   
       <Card className="p-5 space-y-4">
         <div className="space-y-2">
@@ -24,7 +38,7 @@ const LoginForm = () => {
             <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground pointer-events-none" />
             <Input
               name="email"
-              type="email"
+              type="email" 
               placeholder="you@example.com"
               className="pl-10 h-11"
               required
@@ -54,9 +68,11 @@ const LoginForm = () => {
         <Button
           type="submit"
           className="w-full h-11 rounded-full font-semibold gap-2"
+          disabled={pending}
         >
-          {" "}
-          Sign In
+          {
+            pending ? "Submitting..." : "Login"
+          }
           <ArrowRight className="h-4 w-4" />
         </Button>
 

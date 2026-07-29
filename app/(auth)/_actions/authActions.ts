@@ -1,16 +1,22 @@
 "use server";
 
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 //Login
-type LoginState ={
-     success: boolean,
-    statusCode: number,
-    message: string,
-    data: {
-        accessToken : string,
-        refreshToken : string
-    }
-}
-export const loginActions = async (prevState : LoginState , formdata: FormData) => {
+type LoginState = {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    accessToken: string;
+    refreshToken: string;
+  };
+};
+export const loginActions = async (
+  prevState: LoginState,
+  formdata: FormData,
+) => {
   console.log(formdata);
   const email = formdata.get("email");
   const password = formdata.get("password");
@@ -27,9 +33,21 @@ export const loginActions = async (prevState : LoginState , formdata: FormData) 
     },
     body: JSON.stringify(payload),
   });
-  const result = await res.json();
+  const result: LoginState = await res.json();
 
-  console.log(result);
+  if (result.success) {
+    const cookieStore = await cookies();
+    cookieStore.set("accessToken", result.data.accessToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24  , //1 day
+      sameSite: "lax"
+    });
+    cookieStore.set("refreshToken", result.data.refreshToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 7 , //7 days
+      sameSite: "lax"
+    });
+  }
   return result;
 };
 
@@ -42,7 +60,10 @@ type RegisterState = {
   data: any;
 };
 
-export const registerActions = async (prevState: RegisterState, formdata: FormData) => {
+export const registerActions = async (
+  prevState: RegisterState,
+  formdata: FormData,
+) => {
   const name = formdata.get("name");
   const email = formdata.get("email");
   const password = formdata.get("password");
@@ -78,5 +99,9 @@ export const registerActions = async (prevState: RegisterState, formdata: FormDa
   const result = await res.json();
 
   console.log(result);
+    if (result.success) {
+    redirect("/login");
+  }
+
   return result;
 };

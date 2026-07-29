@@ -35,10 +35,10 @@ const RegisterForm = () => {
   useEffect(() => {
     if (!state) return;
     if (state.success) {
-      toast.success(state.message || "Login Successful!");
+      toast.success(state.message || "Registration Successful!");
     }
     if (!state.success) {
-      toast.error(state.message || "Login Failed!");
+      toast.error(state.message || "Registration Failed!");
     }
   }, [state]);
 

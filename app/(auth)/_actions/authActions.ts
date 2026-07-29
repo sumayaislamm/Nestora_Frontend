@@ -34,7 +34,15 @@ export const loginActions = async (prevState : LoginState , formdata: FormData) 
 };
 
 // register
-export const registerActions = async (formdata: FormData) => {
+type RegisterState = {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+};
+
+export const registerActions = async (prevState: RegisterState, formdata: FormData) => {
   const name = formdata.get("name");
   const email = formdata.get("email");
   const password = formdata.get("password");
@@ -50,14 +58,15 @@ export const registerActions = async (formdata: FormData) => {
     profileImage = `data:${profileImageFile.type};base64,${base64}`;
   }
 
-  const payload = {
+  const payload: Record<string, unknown> = {
     name,
     email,
     password,
-    phone,
-    profileImage,
     role,
   };
+
+  if (phone) payload.phone = phone;
+  if (profileImage) payload.profileImage = profileImage;
 
   const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/register`, {
     method: "POST",

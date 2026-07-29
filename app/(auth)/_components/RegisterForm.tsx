@@ -12,10 +12,12 @@ import {
 } from "@/components/ui/select";
 import { ImagePlus, KeyRound, Mail, Phone, UserRoundPen } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useActionState, useEffect, useState } from "react";
 import { registerActions } from "../_actions/authActions";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
+  // Image setting start
   const [role, setRole] = useState("TENANT");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
@@ -26,8 +28,22 @@ const RegisterForm = () => {
     }
   };
 
+  // Image setting end
+
+  const [state, action, pending] = useActionState(registerActions, false);
+
+  useEffect(() => {
+    if (!state) return;
+    if (state.success) {
+      toast.success(state.message || "Login Successful!");
+    }
+    if (!state.success) {
+      toast.error(state.message || "Login Failed!");
+    }
+  }, [state]);
+
   return (
-    <form action={registerActions} className="space-y-4">
+    <form action={action} className="space-y-4">
       <Card className="p-5 ">
         {/* Profile Image */}
         <div className="flex flex-col items-center ">
@@ -145,21 +161,21 @@ const RegisterForm = () => {
             Role
           </label>
           <div className="relative ">
-              <Select name="role" value={role} onValueChange={setRole}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="TENANT">Tenant</SelectItem>
-                  <SelectItem value="LANDLORD">Landlord</SelectItem>
-                  <SelectItem value="ADMIN">Admin</SelectItem>
-                </SelectContent>
-              </Select>
+            <Select name="role" value={role} onValueChange={setRole}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="TENANT">Tenant</SelectItem>
+                <SelectItem value="LANDLORD">Landlord</SelectItem>
+                <SelectItem value="ADMIN">Admin</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
-        <Button type="submit" className="w-full">
-          Register
+        <Button type="submit" className="w-full" disabled={pending}>
+          {pending ? "Submiting..." : "Register"}
         </Button>
 
         <p className="items-center justify-center text-xs mx-auto mt-[-10]">

@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/select";
 import { ImagePlus } from "lucide-react";
 import Link from "next/link";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState} from "react";
+import { registerActions } from "../_actions/authActions";
 
 const RegisterForm = () => {
   const [role, setRole] = useState("TENANT");
@@ -28,17 +29,19 @@ const RegisterForm = () => {
 
 
   return (
-     <form className="space-y-4">
+     <form 
+     action={registerActions}
+     className="space-y-4">
    
       <Card className="p-5 ">
         {/* Profile Image */}
-        <div className="flex flex-col items-center space-y-2">
+        <div className="flex flex-col items-center ">
           <label
             htmlFor="profileImage"
             className="relative flex h-15 w-15 cursor-pointer items-center justify-center rounded-full border border-dashed bg-muted overflow-hidden"
           >
             {previewImage ? (
-              // eslint-disable-next-line @next/next/no-img-element
+              //  eslint-disable-next-line @next/next/no-img-element
               <img
                 src={previewImage}
                 alt="Profile preview"
@@ -71,7 +74,7 @@ const RegisterForm = () => {
           <Input
             name="name"
             type="text"
-            placeholder="Enter Your Name Here"
+            placeholder="Your Name "
             required
           />
         </div>
@@ -86,7 +89,7 @@ const RegisterForm = () => {
           <Input
             name="email"
             type="email"
-            placeholder="Enter Your Email Here"
+            placeholder="you@example.com"
             required
           />
         </div>
@@ -101,7 +104,7 @@ const RegisterForm = () => {
           <Input
             name="phone"
             type="tel"
-            placeholder="Enter Your Phone Number Here"
+            placeholder="123456789"
           />
         </div>
 
@@ -115,7 +118,7 @@ const RegisterForm = () => {
           <Input
             name="password"
             type="password"
-            placeholder="Enter Your Password Here"
+            placeholder="••••••••"
             required
           />
         </div>
@@ -125,7 +128,7 @@ const RegisterForm = () => {
             htmlFor="role"
             className="block text-xs font-medium text-muted-foreground"
           >
-            Register As
+            Role
           </label>
           <Select name="role" value={role} onValueChange={setRole}>
             <SelectTrigger className="w-full">

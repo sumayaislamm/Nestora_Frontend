@@ -5,10 +5,13 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Lock, Mail } from "lucide-react";
 import Link from "next/link";
+import { loginActions } from "../_actions/authActions";
 
 const LoginForm = () => {
   return (
-    <form className="w-full space-y-6">   
+    <form 
+    action={loginActions}
+    className="w-full space-y-6">   
       <Card className="p-5 space-y-4">
         <div className="space-y-2">
           <label

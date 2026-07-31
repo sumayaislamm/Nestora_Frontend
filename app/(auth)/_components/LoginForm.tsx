@@ -8,20 +8,33 @@ import Link from "next/link";
 import { loginActions } from "../_actions/authActions";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [state, action, pending] = useActionState(loginActions, false);
+  const router = useRouter();
 
-  useEffect(() =>{
-    if(!state) return;
-    if(state.success){
-          toast.success(state.message || "Login Successful!")
-    }
-    if(!state.success){
-              toast.error(state.message || "Login Failed!")
-    }
+  // useEffect(() =>{
+  //   if(!state) return;
+  //   if(state.success){
+  //         toast.success(state.message || "Login Successful!")
+  //   }
+  //   if(!state.success){
+  //             toast.error(state.message || "Login Failed!")
+  //   }
 
-  }, [state])
+  // }, [state])
+  // LoginForm.tsx এর useEffect এ
+useEffect(() => {
+  if (!state) return;
+  if (state.success) {
+    toast.success(state.message || "Login Successful!");
+    // router.push("/tenant-dashboard"); 
+  }
+  if (!state.success) {
+    toast.error(state.message || "Login Failed!");
+  }
+}, [state]);
   return (
     <form 
     action={action}

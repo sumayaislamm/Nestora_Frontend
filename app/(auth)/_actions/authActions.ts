@@ -1,5 +1,6 @@
 "use server";
 
+
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -47,6 +48,7 @@ export const loginActions = async (
       maxAge: 60 * 60 * 24 * 7 , //7 days
       sameSite: "lax"
     });
+    redirect("/tenant-dashboard", "replace" );
   }
   return result;
 };

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Building2, User, Settings,LogOut, } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -99,16 +100,37 @@ export function Navbar({ user }: NavbarProps) {
         {/* Right: Profile icon */}
  {user?.success ? (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          {/* <DropdownMenuTrigger asChild>
             <div className="gap-2 flex cursor-pointer">
               <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center">
                 <button className="flex h-9 w-9 items-center justify-center rounded-full bg-muted transition-colors hover:bg-muted/80">
-                  {/* Profile Icon  */}
+                
                   <User className="h-4.5 w-4.5 text-primary cursor-pointer" />
                 </button>
               </div>
             </div>
-          </DropdownMenuTrigger>
+          </DropdownMenuTrigger>  */}
+
+<DropdownMenuTrigger asChild>
+  <div className="gap-2 flex cursor-pointer">
+    <button className="flex h-9 w-9 items-center justify-center rounded-full bg-muted transition-colors hover:bg-muted/80 overflow-hidden">
+      <Avatar className="h-9 w-9">
+        <AvatarImage
+          src={user?.data?.profile?.profileImage || undefined}
+          alt={user?.data?.profile?.name || "User"}
+        />
+        <AvatarFallback className="bg-primary/10">
+          {user?.data?.profile?.name ? (
+            user.data.profile.name.charAt(0).toUpperCase()
+          ) : (
+            <User className="h-4.5 w-4.5 text-primary" />
+          )}
+        </AvatarFallback>
+      </Avatar>
+    </button>
+  </div>
+</DropdownMenuTrigger>
+
           <DropdownMenuContent align="end" className="w-48">
             <div className="px-2 py-1.5 text-sm font-medium text-foreground mb-2">
               {user?.data?.profile?.name || "Name"}

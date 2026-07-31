@@ -24,6 +24,7 @@ import { logOut } from "@/app/service/logout";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
+  { label: "Properties", href: "/properties" },
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Contact", href: "/contact" },

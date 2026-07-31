@@ -1,9 +1,16 @@
-import React from 'react'
+import { getPropertiesAction } from "../_actions/propertyActions";
 
-const propertiesPage = () => {
+
+export default async function PropertiesPage() {
+  const properties = await getPropertiesAction();
+
   return (
-    <div>propertiesPage</div>
-  )
-}
+    <main className="container mx-auto py-10">
+      <h1 className="mb-8 text-3xl font-bold">
+        All Properties
+      </h1>
 
-export default propertiesPage
+      <pre>{JSON.stringify(properties, null, 2)}</pre>
+    </main>
+  );
+}

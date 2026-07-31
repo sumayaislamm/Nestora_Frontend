@@ -2,30 +2,24 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtUtils } from "./app/utils/jwt";
-import { cookies } from "next/headers";
 
 const AUTH_ROUTES = ["/login", "/register"];
 const PUBLIC_ROUTES = ["/", "/properties", "/login", "/register"];
 
-export async function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  const cookieStore = await cookies();
   const accessToken = request.cookies.get("accessToken")?.value;
 
+  
   const decodedToken = accessToken
-    ? jwtUtils.verifyToken(accessToken, process.env.JWT_SECRET as string)
-    : null;
+    ? jwtUtils.verifyToken(accessToken, process.env.JWT_SECRET as string):null;
   //   console.log(decodedToken)
   let userRole = null;
 
-  if (!decodedToken?.success) {
-    // token expired
-    cookieStore.delete("accessToken");
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
   if (decodedToken?.success && decodedToken.data) {
     userRole = (decodedToken.data as JwtPayload).role;
   }
+
 
   // User Login but trying to access login page
   if (accessToken && AUTH_ROUTES.includes(pathname)) {

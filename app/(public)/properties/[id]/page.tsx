@@ -3,7 +3,7 @@ import PropertyInfo from "./_components/PropertyInfo";
 import Amenities from "./_components/Amenities";
 import LandlordCard from "./_components/LandlordCard";
 import RentSection from "./_components/RentSection";
-import { getPropertyById } from "@/app/service/property";
+import { getPropertyById } from "@/app/service/propertyService";
 
 
 export default async function PropertyDetailsPage({

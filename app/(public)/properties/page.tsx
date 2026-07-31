@@ -1,19 +1,36 @@
-import { getAllProperties } from "@/app/service/propertyService";
+import { getAllProperties, getAllPropertiesSearch } from "@/app/service/propertyService";
 import { getPropertiesAction } from "../_actions/propertyActions";
 import PropertiesClient from "./_components/PropertiesClient";
 import PropertyGrid from "./_components/PropertyGrid";
+import SearchBar from "./_components/SearchBar";
 
-export default async function PropertiesPage() {
-  const properties = await getAllProperties();
-  // console.log("Prooooooo", properties)
 
-  // console.log("PAGE", Array.isArray(properties));
-  // console.log(properties);
+export default async function PropertiesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    search?: string;
+    category?: string;
+    availability?: string;
+    minRent?: string;
+    maxRent?: string;
+  }>;
+}) {
+  const params = await searchParams;
+
+  const properties = Object.keys(params).length
+    ? await getAllPropertiesSearch(params)
+    : await getAllProperties();
 
   return (
     <main className="container mx-auto py-10">
-      <h1 className="mb-8 text-3xl font-bold">All Properties</h1>
-      <PropertiesClient properties={properties} />
+      <h1 className="mb-8 text-3xl font-bold">
+        All Properties
+      </h1>
+
+      <SearchBar />
+
+     <PropertiesClient properties={properties} />
     </main>
   );
 }

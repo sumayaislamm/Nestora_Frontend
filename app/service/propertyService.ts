@@ -32,3 +32,40 @@ export const getSingleProperty = async (
 
   return result.data;
 };
+export const getPropertyById = async (id: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/properties/${id}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch property");
+  }
+
+  const result = await res.json();
+
+  return result.data.property;
+};
+
+export const getAllPropertiesSearch = async (
+  query: Record<string, string>
+) => {
+  const params = new URLSearchParams(query);
+
+  const res = await fetch(
+    `${BASE_URL}/api/properties?${params.toString()}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch properties");
+  }
+
+  const result = await res.json();
+
+  return result.data.data;
+};

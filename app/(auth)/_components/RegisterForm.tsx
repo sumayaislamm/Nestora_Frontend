@@ -19,14 +19,14 @@ import { toast } from "sonner";
 const RegisterForm = () => {
   // Image setting start
   const [role, setRole] = useState("TENANT");
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  // const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setPreviewImage(URL.createObjectURL(file));
-    }
-  };
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     setPreviewImage(URL.createObjectURL(file));
+  //   }
+  // };
 
   // Image setting end
 
@@ -46,7 +46,7 @@ const RegisterForm = () => {
     <form action={action} className="space-y-4">
       <Card className="p-5 ">
         {/* Profile Image */}
-        <div className="flex flex-col items-center ">
+        {/* <div className="flex flex-col items-center ">
           <label
             htmlFor="profileImage"
             className="relative flex h-15 w-15 cursor-pointer items-center justify-center rounded-full border border-dashed bg-muted overflow-hidden"
@@ -73,7 +73,7 @@ const RegisterForm = () => {
           <span className="text-xs text-muted-foreground">
             Upload profile photo
           </span>
-        </div>
+        </div> */}
         {/* Name  */}
         <div className="space-y-2">
           <label
@@ -168,7 +168,7 @@ const RegisterForm = () => {
               <SelectContent>
                 <SelectItem value="TENANT">Tenant</SelectItem>
                 <SelectItem value="LANDLORD">Landlord</SelectItem>
-                <SelectItem value="ADMIN">Admin</SelectItem>
+                {/* <SelectItem value="ADMIN">Admin</SelectItem> */}
               </SelectContent>
             </Select>
           </div>

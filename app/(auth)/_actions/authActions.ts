@@ -1,8 +1,8 @@
 "use server";
 
-
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 //Login
 type LoginState = {
@@ -34,21 +34,36 @@ export const loginActions = async (
     },
     body: JSON.stringify(payload),
   });
-  const result= await res.json();
+  const result = await res.json();
 
   if (result.success) {
     const cookieStore = await cookies();
     cookieStore.set("accessToken", result.data.accessToken, {
       httpOnly: true,
-      maxAge: 60 * 60 * 24  , //1 day
-      sameSite: "lax"
+      maxAge: 60 * 60 * 24, //1 day
+      sameSite: "lax",
     });
     cookieStore.set("refreshToken", result.data.refreshToken, {
       httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7 , //7 days
-      sameSite: "lax"
+      maxAge: 60 * 60 * 24 * 7, //7 days
+      sameSite: "lax",
     });
-    redirect("/tenant-dashboard", "replace" );
+
+    const decodedToken = jwt.decode(result.data.accessToken) as JwtPayload;
+    console.log("decoded token", decodedToken);
+
+    if (decodedToken?.role === "TENANT") {
+      redirect("/tenant-dashboard", "replace");
+    }
+    else if (decodedToken?.role === "LANDLORD") {
+      redirect("/landlord-dashboard", "replace");
+    }
+    else if (decodedToken?.role === "ADMIN") {
+      redirect("/admin-dashboard", "replace");
+    }
+    else{
+      redirect("/")
+    }
   }
   return result;
 };
@@ -71,15 +86,15 @@ export const registerActions = async (
   const password = formdata.get("password");
   const phone = formdata.get("phone");
   const role = formdata.get("role");
-  const profileImageFile = formdata.get("profileImage") as File;
+  const profileImage = formdata.get("profileImage");
 
-  let profileImage: string | null = null;
+  // let profileImage: string | null = null;
 
-  if (profileImageFile && profileImageFile.size > 0) {
-    const bytes = await profileImageFile.arrayBuffer();
-    const base64 = Buffer.from(bytes).toString("base64");
-    profileImage = `data:${profileImageFile.type};base64,${base64}`;
-  }
+  // if (profileImageFile && profileImageFile.size > 0) {
+  //   const bytes = await profileImageFile.arrayBuffer();
+  //   const base64 = Buffer.from(bytes).toString("base64");
+  //   profileImage = `data:${profileImageFile.type};base64,${base64}`;
+  // }
 
   const payload: Record<string, unknown> = {
     name,
@@ -101,7 +116,7 @@ export const registerActions = async (
   const result = await res.json();
 
   console.log(result);
-    if (result.success) {
+  if (result.success) {
     redirect("/login");
   }
 

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
 import Link from "next/link";
-import { Building2, User, Settings,LogOut, } from "lucide-react";
+import { Building2, User, Settings, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -15,26 +15,24 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { logOut } from "@/app/service/logout";
 
- const NAV_ITEMS = [
+const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Contact", href: "/contact" },
 ];
 
-  // User dropdown menu items
-  const USER_MENU_ITEMS = [
-    { label: "Profile", href: "/profile", icon: User },
-    { label: "Settings", href: "/settings", icon: Settings },
-  ];
-
-
+// User dropdown menu items
+const USER_MENU_ITEMS = [
+  { label: "Profile", href: "/profile", icon: User },
+  { label: "Settings", href: "/settings", icon: Settings },
+];
 
 type IUser = {
   success: boolean;
   message: string;
   data: {
-    profile: {          
+    profile: {
       id: string;
       name: string;
       email: string;
@@ -48,12 +46,9 @@ type IUser = {
   };
 };
 
-
-
 type NavbarProps = {
   user?: IUser | null;
 };
-
 
 export function Navbar({ user }: NavbarProps) {
   const pathname = usePathname();
@@ -81,8 +76,7 @@ export function Navbar({ user }: NavbarProps) {
 
         {/* Middle: Nav links (absolutely centered) */}
         <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 md:flex">
-        
-               {NAV_ITEMS.map((item) => (
+          {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -94,68 +88,66 @@ export function Navbar({ user }: NavbarProps) {
         </nav>
 
         {/* Right: Profile icon */}
- {user?.success ? (
-        <DropdownMenu>
+        {user?.success ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="gap-2 flex cursor-pointer">
+                <button className="flex h-9 w-9 items-center justify-center rounded-full bg-muted transition-colors hover:bg-muted/80 overflow-hidden">
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage
+                      src={user?.data?.profile?.profileImage || undefined}
+                      alt={user?.data?.profile?.name || "User"}
+                    />
+                    <AvatarFallback className="bg-primary/10">
+                      {user?.data?.profile?.name ? (
+                        user.data.profile.name.charAt(0).toUpperCase()
+                      ) : (
+                        <User className="h-4.5 w-4.5 text-primary" />
+                      )}
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
+              </div>
+            </DropdownMenuTrigger>
 
-<DropdownMenuTrigger asChild>
-  <div className="gap-2 flex cursor-pointer">
-    <button className="flex h-9 w-9 items-center justify-center rounded-full bg-muted transition-colors hover:bg-muted/80 overflow-hidden">
-      <Avatar className="h-9 w-9">
-        <AvatarImage
-          src={user?.data?.profile?.profileImage || undefined}
-          alt={user?.data?.profile?.name || "User"}
-        />
-        <AvatarFallback className="bg-primary/10">
-          {user?.data?.profile?.name ? (
-            user.data.profile.name.charAt(0).toUpperCase()
-          ) : (
-            <User className="h-4.5 w-4.5 text-primary" />
-          )}
-        </AvatarFallback>
-      </Avatar>
-    </button>
-  </div>
-</DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="w-48">
-            <div className="px-2 py-1.5 text-sm font-medium text-foreground mb-2">
-              {user?.data?.profile?.name || "Name"}
-            </div>
-            <div className="px-2 pb-2 text-xs text-muted-foreground">
-             {user?.data?.profile?.email || "Email"}
-            </div>
-            <div className="px-2 pb-2 text-xs text-muted-foreground">
-              {user?.data?.profile?.role || "Role"}
-            </div>
-            <DropdownMenuSeparator className="mb-2" />
-            {USER_MENU_ITEMS.map((item) => {
-              const Icon = item.icon;
-              return (
-                <DropdownMenuItem key={item.href} asChild>
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
-                    <Icon className="size-4" />
-                    <span>{item.label}</span>
-                  </Link>
-                </DropdownMenuItem>
-              );
-            })}
-            <DropdownMenuSeparator className="my-2" />
-            <DropdownMenuItem
-              onClick={async () => {
-                handleUserMenuAction("logout");
-              }}
-              className="gap-2 cursor-pointer text-destructive"
-            >
-              <LogOut className="size-4" />
-              <span>Logout</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-         ) : pathname === "/login" ? (
+            <DropdownMenuContent align="end" className="w-48">
+              <div className="px-2 py-1.5 text-sm font-medium text-foreground mb-2">
+                {user?.data?.profile?.name || "Name"}
+              </div>
+              <div className="px-2 pb-2 text-xs text-muted-foreground">
+                {user?.data?.profile?.email || "Email"}
+              </div>
+              <div className="px-2 pb-2 text-xs text-muted-foreground">
+                {user?.data?.profile?.role || "Role"}
+              </div>
+              <DropdownMenuSeparator className="mb-2" />
+              {USER_MENU_ITEMS.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <DropdownMenuItem key={item.href} asChild>
+                    <Link
+                      href={item.href}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      <Icon className="size-4" />
+                      <span>{item.label}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                );
+              })}
+              <DropdownMenuSeparator className="my-2" />
+              <DropdownMenuItem
+                onClick={async () => {
+                  handleUserMenuAction("logout");
+                }}
+                className="gap-2 cursor-pointer text-destructive"
+              >
+                <LogOut className="size-4" />
+                <span>Logout</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : pathname === "/login" ? (
           <Link href="/register">
             <Button className="cursor-pointer">Register</Button>
           </Link>
@@ -164,7 +156,6 @@ export function Navbar({ user }: NavbarProps) {
             <Button className="cursor-pointer">Login</Button>
           </Link>
         )}
-      
       </div>
     </header>
   );

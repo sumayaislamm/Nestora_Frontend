@@ -11,7 +11,14 @@ export const getAllProperties = async (): Promise<IProperty[]> => {
 
   const result = await res.json();
 
-  return result.data;
+//   const result = await res.json();
+
+// console.log("RESULT =", result);
+// console.log("RESULT.DATA =", result.data);
+
+return result.data.data;
+
+//   return result.data;
 };
 
 export const getSingleProperty = async (

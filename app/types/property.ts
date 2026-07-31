@@ -36,3 +36,12 @@ export interface IProperty {
   createdAt: string;
   updatedAt: string;
 }
+
+interface IPropertyResponse {
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+  };
+  data: IProperty[];
+}

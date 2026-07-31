@@ -62,7 +62,7 @@ export function Navbar({ user }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const handleUserMenuAction = async (action: string) => {
-    console.log(`User menu action: ${action}`);
+    // console.log(`User menu action: ${action}`);
     if (action === "logout") {
       await logOut();
       toast.success("User Logged Out Successfully!");

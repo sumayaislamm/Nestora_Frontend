@@ -6,7 +6,7 @@ export const getMe = async () =>{
  const cookieStore = await cookies()
 
  const accessToken = cookieStore.get("accessToken")?.value;
- console.log(accessToken)
+//  console.log(accessToken)
 
  if (!accessToken) {
   return {

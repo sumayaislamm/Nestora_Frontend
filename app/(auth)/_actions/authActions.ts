@@ -18,7 +18,7 @@ export const loginActions = async (
   prevState: LoginState,
   formdata: FormData,
 ) => {
-  console.log(formdata);
+  // console.log(formdata);
   const email = formdata.get("email");
   const password = formdata.get("password");
 
@@ -50,7 +50,7 @@ export const loginActions = async (
     });
 
     const decodedToken = jwt.decode(result.data.accessToken) as JwtPayload;
-    console.log("decoded token", decodedToken);
+    // console.log("decoded token", decodedToken);
 
     if (decodedToken?.role === "TENANT") {
       redirect("/tenant-dashboard", "replace");
@@ -115,7 +115,7 @@ export const registerActions = async (
   });
   const result = await res.json();
 
-  console.log(result);
+  // console.log(result);
   if (result.success) {
     redirect("/login");
   }

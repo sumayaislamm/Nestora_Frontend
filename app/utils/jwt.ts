@@ -10,7 +10,7 @@ const verifyToken = (token: string, secret: string) => {
     };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.log("Verification Failed", error);
+    console.error("Verification Failed", error);
     return {
       success: false,
       error: error.message,

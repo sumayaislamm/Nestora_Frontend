@@ -71,7 +71,7 @@ export function HeroSection() {
         </div>
 
         {/* Right: signature — a fanned stack of listing cards, Nestora's visual thumbprint */}
-        <div className="relative mx-auto hidden h-[420px] w-full max-w-md lg:block">
+        <div className="relative mx-auto hidden h-105 w-full max-w-md lg:block">
           <ListingCard
             className="absolute left-2 top-14 w-64 -rotate-6"
             title="Willow Creek Studio"
@@ -93,7 +93,7 @@ export function HeroSection() {
           <ListingCard
             className="absolute bottom-2 left-14 w-64 rotate-1"
             title="Garden View Duplex"
-            location="Gulshan, Dhaka"
+            location="Gul shan, Dhaka"
             price="৳55,000"
             beds={4}
             baths={3}

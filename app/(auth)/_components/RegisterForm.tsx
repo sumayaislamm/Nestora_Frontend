@@ -174,7 +174,7 @@ const RegisterForm = () => {
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={pending}>
+        <Button type="submit" className="w-full" disabled={pending}> 
           {pending ? "Submiting..." : "Register"}
         </Button>
 

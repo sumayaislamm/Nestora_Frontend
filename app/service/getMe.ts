@@ -1,6 +1,6 @@
 "use server"
 
-import { cookies, headers } from "next/headers"
+import { cookies } from "next/headers"
 
 export const getMe = async () =>{
  const cookieStore = await cookies()

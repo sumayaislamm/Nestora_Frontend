@@ -30,11 +30,11 @@ if(accessToken && AUTH_ROUTES.includes(pathname)){
         return NextResponse.redirect(new URL("/", request.url));
     }
 }
-const isPublic = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(route + "/"));
+const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(route + "/"));
 
-const isAuthRoute = AUTH_ROUTES.some((route) => pathname === route || pathname.startsWith(route = "/"));
+const isAuthRoute = AUTH_ROUTES.some((route) => pathname === route || pathname.startsWith(route + "/"));
 
-if(!accessToken && !isPublic && !isAuthRoute)  {
+if(!accessToken && !isPublicRoute && !isAuthRoute)  {
 return NextResponse.redirect(new URL("/login", request.url));
 }
 

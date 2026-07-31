@@ -3,6 +3,7 @@
 import { Navbar } from "@/components/navbar";
 import React from "react";
 import { getMe } from "../service/getMe";
+import { Footer } from "@/components/footer";
 
 const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
    const user = await getMe();
@@ -10,6 +11,7 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
     <>
     <Navbar user={user} ></Navbar>
       {children}
+      <Footer></Footer>
     </>
   );
 };

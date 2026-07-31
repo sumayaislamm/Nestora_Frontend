@@ -13,6 +13,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
+import { logOut } from "@/app/service/logout";
 
  const NAV_ITEMS = [
   { label: "Home", href: "/" },
@@ -60,7 +61,7 @@ export function Navbar({ user }: NavbarProps) {
   const handleUserMenuAction = async (action: string) => {
     console.log(`User menu action: ${action}`);
     if (action === "logout") {
-      // await logOut();
+      await logOut();
       toast.success("User Logged Out Successfully!");
       router.push("/login");
     }
@@ -80,12 +81,7 @@ export function Navbar({ user }: NavbarProps) {
 
         {/* Middle: Nav links (absolutely centered) */}
         <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 md:flex">
-          {/* <Link
-            href="/"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Home
-          </Link> */}
+        
                {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
@@ -100,16 +96,6 @@ export function Navbar({ user }: NavbarProps) {
         {/* Right: Profile icon */}
  {user?.success ? (
         <DropdownMenu>
-          {/* <DropdownMenuTrigger asChild>
-            <div className="gap-2 flex cursor-pointer">
-              <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center">
-                <button className="flex h-9 w-9 items-center justify-center rounded-full bg-muted transition-colors hover:bg-muted/80">
-                
-                  <User className="h-4.5 w-4.5 text-primary cursor-pointer" />
-                </button>
-              </div>
-            </div>
-          </DropdownMenuTrigger>  */}
 
 <DropdownMenuTrigger asChild>
   <div className="gap-2 flex cursor-pointer">

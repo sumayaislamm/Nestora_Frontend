@@ -1,42 +1,3 @@
-// "use server"
-
-// import { cookies } from "next/headers"
-
-// export const getMe = async () =>{
-//  const cookieStore = await cookies();
-
-//  const accessToken = cookieStore.get('accessToken')?.value;
-//   if (!accessToken){
-//     // throw new Error ("User not Logged in!")
-//     return {
-//         success : false,
-//         message : "User Not Logged in!"
-//     }
-//   }
-
-
-//   try {
-//   const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/me`, {
-//     headers :{
-//         // Authorization : accessToken as unknown as string,
-//         Authorization : `Bearer ${accessToken}`,
-
-//     },
-//       // cache : "force-cache", 
-//       next : {
-//         // revalidate :  60 * 60 * 24 * 7 ,//1 day
-//         tags : ["my-profile"]
-//       }
-//   });
-//   const result = await res.json(); 
-//   return result.success ? result : null;
-// } catch (error) {
-//   console.log("get Current user Failed:", error);
-//   return null;
-// }
-
-// }
-
 "use server"
 
 import { cookies, headers } from "next/headers"
@@ -48,7 +9,6 @@ export const getMe = async () =>{
  console.log(accessToken)
 
  if (!accessToken) {
-  // throw new Error ("User Not Found!")
   return {
     success : false,
     message: "user not logged in"
@@ -57,7 +17,13 @@ export const getMe = async () =>{
 
  const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/me`, {
   headers : {
-    Authorization : `Bearer ${accessToken}`
+    // Authorization : `Bearer ${accessToken}`
+    Cookie : `accessToken=${accessToken}`
+  },
+  cache: "force-cache",
+  next : {
+    revalidate : 60 * 60 * 24, //1 day
+    tags : ["my-profile"]
   }
   
  })

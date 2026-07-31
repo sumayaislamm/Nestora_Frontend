@@ -15,13 +15,20 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { logOut } from "@/app/service/logout";
 
+// const NAV_ITEMS = [
+//   { label: "Home", href: "/" },
+//   { label: "About", href: "/about" },
+//   { label: "Services", href: "/services" },
+//   { label: "Contact", href: "/contact" },
+// ];
+
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Contact", href: "/contact" },
+  { label: "Dashboard", href: "" },
 ];
-
 // User dropdown menu items
 const USER_MENU_ITEMS = [
   { label: "Profile", href: "/profile", icon: User },
@@ -61,6 +68,23 @@ export function Navbar({ user }: NavbarProps) {
       router.push("/login");
     }
   };
+  const getDashboardRoute = () => {
+    const role = user?.data?.profile?.role;
+
+    switch (role) {
+      case "TENANT":
+        return "/tenant-dashboard";
+
+      case "LANDLORD":
+        return "/landlord-dashboard";
+
+      case "ADMIN":
+        return "/admin-dashboard";
+
+      default:
+        return "/login";
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
@@ -75,7 +99,7 @@ export function Navbar({ user }: NavbarProps) {
         </Link>
 
         {/* Middle: Nav links (absolutely centered) */}
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 md:flex">
+        {/* <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 md:flex">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
@@ -85,6 +109,26 @@ export function Navbar({ user }: NavbarProps) {
               {item.label}
             </Link>
           ))}
+        </nav> */}
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 md:flex">
+          {NAV_ITEMS.map((item) => {
+            const href =
+              item.label === "Dashboard" ? getDashboardRoute() : item.href;
+
+            return (
+              <Link
+                key={item.label}
+                href={href}
+                className={`px-3 py-2 text-sm font-medium transition-colors rounded-md hover:bg-accent ${
+                  pathname === href
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Right: Profile icon */}

@@ -7,7 +7,6 @@ const PublicLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <>
     <Navbar user={user}></Navbar>
-      PublicLayout
       {children}
     </>
   );

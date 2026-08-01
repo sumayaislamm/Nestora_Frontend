@@ -8,7 +8,7 @@ import {
   Plus,
   Edit,
   Trash2,
-  FileText,
+  FileText, 
   CheckCircle,
   Users,
   Layers,
@@ -80,25 +80,10 @@ export const landlordSidebarItems: SidebarItem[] = [
     icon: <Plus size={20} />,
   },
   {
-    label: 'Edit Property',
-    href: '/landlord-dashboard/edit-property',
-    icon: <Edit size={20} />,
-  },
-  {
-    label: 'Delete Property',
-    href: '/landlord-dashboard/delete-property',
-    icon: <Trash2 size={20} />,
-  },
-  {
     label: 'Rental Requests',
     href: '/landlord-dashboard/rental-requests',
     icon: <FileText size={20} />,
-  },
-  {
-    label: 'Approve / Reject Request',
-    href: '/landlord-dashboard/approve-requests',
-    icon: <CheckCircle size={20} />,
-  },
+  }
 ]
 
 export const tenantSidebarItems: SidebarItem[] = [

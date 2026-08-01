@@ -45,3 +45,31 @@ interface IPropertyResponse {
   };
   data: IProperty[];
 }
+
+// Landlord Dashboard Property 
+
+export type Availability = "AVAILABLE" | "RENTED";
+
+export interface ICreateProperty {
+  title: string;
+  description: string;
+  location: string;
+  address: string;
+  rent: number;
+  bedrooms: number;
+  bathrooms: number;
+  size?: number;
+
+  availability: Availability;
+
+  amenities: string[];
+
+  images: string[];
+
+  categoryId: string;
+}
+
+export interface ICategory {
+  id: string;
+  name: string;
+}

@@ -8,7 +8,6 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <>
     <Navbar user={user}></Navbar>
-      DashboardLayout
       {children}
       <Footer></Footer>
     </>

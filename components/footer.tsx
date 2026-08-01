@@ -26,12 +26,7 @@ const CATEGORY_LINKS = [
   { label: "Offices", href: "/properties?category=offices" },
 ];
 
-const ACCOUNT_LINKS = [
-  { label: "List your property", href: "/register" },
-  { label: "Log in", href: "/login" },
-  { label: "Tenant dashboard", href: "/tenant-dashboard" },
-  { label: "Landlord dashboard", href: "/landlord-dashboard" },
-];
+
 
 const SOCIALS = [
   { label: "Facebook", href: "#", icon: FaFacebookF },
@@ -122,24 +117,12 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="size-4 shrink-0 text-primary" />
-                +880 1XXX-XXXXXX
+                +880 1122334455
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="size-4 shrink-0 text-primary" />
                 support@nestora.com
               </li>
-            </ul>
-            <ul className="mt-5 flex flex-col gap-3 border-t border-border pt-5">
-              {ACCOUNT_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
             </ul>
           </div>
         </div>

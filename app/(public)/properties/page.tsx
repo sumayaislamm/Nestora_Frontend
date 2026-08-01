@@ -24,7 +24,7 @@ export default async function PropertiesPage({
 
   return (
     <main className="container mx-auto py-10">
-      <h1 className="mb-8 text-3xl font-bold">
+      <h1 className="mb-8 text-3xl font-bold text-primary text-center">
         All Properties
       </h1>
 

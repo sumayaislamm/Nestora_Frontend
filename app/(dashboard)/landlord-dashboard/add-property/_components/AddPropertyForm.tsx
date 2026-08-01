@@ -85,13 +85,58 @@ export default function AddPropertyForm() {
 
   const addImage = () => {
     const trimmed = imageUrl.trim();
-    if (!trimmed) return;
+
+    if (!trimmed) {
+      toast.error("Please enter an image URL");
+      return;
+    }
+
+    // Check valid URL
+    let url: URL;
+
+    try {
+      url = new URL(trimmed);
+    } catch {
+      toast.error("Please enter a valid URL");
+      return;
+    }
+
+    // Allowed hosts
+    const allowedHosts = [
+      "i.ibb.co",
+      "images.unsplash.com",
+      "res.cloudinary.com",
+    ];
+
+    if (!allowedHosts.includes(url.hostname)) {
+      toast.error("Unsupported image host. Use ImgBB, Unsplash or Cloudinary.");
+      return;
+    }
+
+    // Duplicate check
     if (images.includes(trimmed)) {
       toast.error("Image already added");
       return;
     }
-    setValue("images", [...images, trimmed], { shouldValidate: true });
-    setImageUrl("");
+
+    // Check image actually loads
+    const img = new Image();
+
+    img.onload = () => {
+      toast.success(`Image added (${img.naturalWidth} × ${img.naturalHeight})`);
+
+      setValue("images", [...images, trimmed], {
+        shouldValidate: true,
+      });
+
+      setImageUrl("");
+    };
+
+    img.onerror = () => {
+      toast.error("Image could not be loaded. Please check the URL.");
+    };
+
+    img.src = trimmed;
   };
 
   const removeImage = (url: string) => {
@@ -223,47 +268,6 @@ export default function AddPropertyForm() {
       </div>
 
       {/* Category */}
-
-      {/* <div>
-        <label className="mb-2 block font-medium">Category</label>
-
-        <Select
-          value={categoryId}
-          onValueChange={(value) => {
-            setValue("categoryId", value, {
-              shouldValidate: true,
-              shouldDirty: true,
-              shouldTouch: true,
-            });
-          }}
-        >
-          <SelectTrigger>
-            <SelectValue
-              placeholder={
-                loading
-                  ? "Loading categories..."
-                  : error
-                    ? "Failed to load categories"
-                    : categories.length === 0
-                      ? "No categories found"
-                      : "Select Category"
-              }
-            />
-          </SelectTrigger>
-
-          <SelectContent>
-            {categories.map((category) => (
-              <SelectItem key={category.id} value={category.id}>
-                {category.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <p className="mt-1 text-sm text-red-500">
-          {errors.categoryId?.message}
-        </p>
-      </div> */}
       <div>
         <label className="mb-2 block font-medium">Category</label>
 
@@ -294,9 +298,9 @@ export default function AddPropertyForm() {
           </SelectContent>
         </Select>
 
-        <p className="mt-1 text-sm text-red-500">
+        {/* <p className="mt-1 text-sm text-red-500">
           {errors.categoryId?.message}
-        </p>
+        </p> */}
       </div>
       {/* Images */}
       <div>
@@ -349,6 +353,13 @@ export default function AddPropertyForm() {
             ))}
           </div>
         )}
+        <p>
+          {" "}
+          <span className="font-medium text-green-600">
+            Supported hosts:
+          </span>{" "}
+          ImgBB, Cloudinary, Unsplash
+        </p>
       </div>
 
       <Button

@@ -8,14 +8,11 @@ import {
   Plus,
   FileText,
   Users,
-  Layers,
-  Ban,
   BarChart3,
   ClipboardList,
   History,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 
 interface SidebarItem {
   label: string;

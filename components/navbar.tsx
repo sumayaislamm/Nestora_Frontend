@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Building2, User, Settings, LogOut } from "lucide-react";
+import {
+  Building2,
+  User,
+  Settings,
+  LogOut,
+  Menu,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -10,17 +16,16 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Button } from "./ui/button";
 import { logOut } from "@/app/service/logout";
-
-// const NAV_ITEMS = [
-//   { label: "Home", href: "/" },
-//   { label: "About", href: "/about" },
-//   { label: "Services", href: "/services" },
-//   { label: "Contact", href: "/contact" },
-// ];
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
@@ -30,7 +35,7 @@ const NAV_ITEMS = [
   { label: "Contact", href: "/contact" },
   { label: "Dashboard", href: "" },
 ];
-// User dropdown menu items
+
 const USER_MENU_ITEMS = [
   { label: "Profile", href: "/profile", icon: User },
   { label: "Settings", href: "/settings", icon: Settings },
@@ -61,14 +66,15 @@ type NavbarProps = {
 export function Navbar({ user }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
+
   const handleUserMenuAction = async (action: string) => {
-    // console.log(`User menu action: ${action}`);
     if (action === "logout") {
       await logOut();
       toast.success("User Logged Out Successfully!");
       router.push("/login");
     }
   };
+
   const getDashboardRoute = () => {
     const role = user?.data?.profile?.role;
 
@@ -87,120 +93,186 @@ export function Navbar({ user }: NavbarProps) {
     }
   };
 
+  const renderNavItems = () =>
+    NAV_ITEMS.map((item) => {
+      const href =
+        item.label === "Dashboard"
+          ? getDashboardRoute()
+          : item.href;
+
+      return (
+        <Link
+          key={item.label}
+          href={href}
+          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+            pathname === href
+              ? "text-foreground bg-accent"
+              : "text-muted-foreground hover:text-foreground hover:bg-accent"
+          }`}
+        >
+          {item.label}
+        </Link>
+      );
+    });
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Left: Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-semibold text-lg"
-        >
-          <Building2 className="h-5 w-5 text-primary" />
-          Nestora
-        </Link>
 
-        {/* Middle: Nav links (absolutely centered) */}
-        {/* <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 md:flex">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav> */}
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 md:flex">
-          {NAV_ITEMS.map((item) => {
-            const href =
-              item.label === "Dashboard" ? getDashboardRoute() : item.href;
+        {/* Left Side */}
+        <div className="flex items-center gap-3">
 
-            return (
-              <Link
-                key={item.label}
-                href={href}
-                className={`px-3 py-2 text-sm font-medium transition-colors rounded-md hover:bg-accent ${
-                  pathname === href
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+          {/* Mobile Menu */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
               >
-                {item.label}
-              </Link>
-            );
-          })}
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent side="left" className="w-72">
+              <div className="mt-8 flex flex-col gap-2">
+                {renderNavItems()}
+              </div>
+            </SheetContent>
+          </Sheet>
+
+
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex items-center gap-2 font-semibold text-lg"
+          >
+            <Building2 className="h-5 w-5 text-primary" />
+            Nestora
+          </Link>
+
+        </div>
+
+
+        {/* Desktop Navigation */}
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 md:flex">
+          {renderNavItems()}
         </nav>
 
-        {/* Right: Profile icon */}
+
+        {/* Right Side */}
         {user?.success ? (
+
           <DropdownMenu>
+
             <DropdownMenuTrigger asChild>
-              <div className="gap-2 flex cursor-pointer">
-                <button className="flex h-9 w-9 items-center justify-center rounded-full bg-muted transition-colors hover:bg-muted/80 overflow-hidden">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage
-                      src={user?.data?.profile?.profileImage || undefined}
-                      alt={user?.data?.profile?.name || "User"}
-                    />
-                    <AvatarFallback className="bg-primary/10">
-                      {user?.data?.profile?.name ? (
-                        user.data.profile.name.charAt(0).toUpperCase()
-                      ) : (
-                        <User className="h-4.5 w-4.5 text-primary" />
+              <button className="flex h-9 w-9 items-center justify-center rounded-full bg-muted overflow-hidden hover:bg-muted/80">
+                <Avatar className="h-9 w-9">
+
+                  <AvatarImage
+                    src={
+                      user.data.profile.profileImage ||
+                      undefined
+                    }
+                    alt={
+                      user.data.profile.name ||
+                      "User"
+                    }
+                  />
+
+                  <AvatarFallback className="bg-primary/10">
+                    {user.data.profile.name
+                      ? user.data.profile.name
+                          .charAt(0)
+                          .toUpperCase()
+                      : (
+                        <User className="h-4 w-4 text-primary" />
                       )}
-                    </AvatarFallback>
-                  </Avatar>
-                </button>
-              </div>
+                  </AvatarFallback>
+
+                </Avatar>
+              </button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className="w-48">
-              <div className="px-2 py-1.5 text-sm font-medium text-foreground mb-2">
-                {user?.data?.profile?.name || "Name"}
+
+            <DropdownMenuContent
+              align="end"
+              className="w-48"
+            >
+
+              <div className="px-2 py-1.5 text-sm font-medium">
+                {user.data.profile.name}
               </div>
+
               <div className="px-2 pb-2 text-xs text-muted-foreground">
-                {user?.data?.profile?.email || "Email"}
+                {user.data.profile.email}
               </div>
+
               <div className="px-2 pb-2 text-xs text-muted-foreground">
-                {user?.data?.profile?.role || "Role"}
+                {user.data.profile.role}
               </div>
-              <DropdownMenuSeparator className="mb-2" />
+
+
+              <DropdownMenuSeparator />
+
+
               {USER_MENU_ITEMS.map((item) => {
                 const Icon = item.icon;
+
                 return (
-                  <DropdownMenuItem key={item.href} asChild>
+                  <DropdownMenuItem
+                    key={item.href}
+                    asChild
+                  >
                     <Link
                       href={item.href}
                       className="flex items-center gap-2 cursor-pointer"
                     >
                       <Icon className="size-4" />
-                      <span>{item.label}</span>
+                      {item.label}
                     </Link>
                   </DropdownMenuItem>
                 );
               })}
-              <DropdownMenuSeparator className="my-2" />
+
+
+              <DropdownMenuSeparator />
+
+
               <DropdownMenuItem
-                onClick={async () => {
-                  handleUserMenuAction("logout");
-                }}
-                className="gap-2 cursor-pointer text-destructive"
+                onClick={() =>
+                  handleUserMenuAction("logout")
+                }
+                className="cursor-pointer text-destructive flex gap-2"
               >
                 <LogOut className="size-4" />
-                <span>Logout</span>
+                Logout
               </DropdownMenuItem>
+
+
             </DropdownMenuContent>
+
           </DropdownMenu>
+
+
         ) : pathname === "/login" ? (
+
           <Link href="/register">
-            <Button className="cursor-pointer">Register</Button>
+            <Button>
+              Register
+            </Button>
           </Link>
+
         ) : (
+
           <Link href="/login">
-            <Button className="cursor-pointer">Login</Button>
+            <Button>
+              Login
+            </Button>
           </Link>
+
         )}
+
       </div>
     </header>
   );

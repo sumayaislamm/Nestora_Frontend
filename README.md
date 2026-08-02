@@ -173,5 +173,5 @@ See [`API_INTEGRATION.md`](./API_INTEGRATION.md) for the full mapping of fronten
 
 ## 📦 Deployment
 
-[Vercel]  (https://vercel.com)
+(https://nestora-frontend.vercel.app/)
 

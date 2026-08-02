@@ -8,7 +8,7 @@ export default function TenantError({
   reset: () => void;
 }) {
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center space-y-4">
+    <div className="flex min-h-100 flex-col items-center justify-center space-y-4">
       <h2 className="text-2xl font-bold">Something went wrong</h2>
 
       <p className="text-muted-foreground">{error.message}</p>

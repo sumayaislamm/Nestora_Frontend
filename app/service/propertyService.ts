@@ -7,9 +7,9 @@ const BASE_URL = process.env.BACKEND_API_URL;
 
 export const getAllProperties = async (): Promise<IProperty[]> => {
   const res = await fetch(`${BASE_URL}/api/properties`, {
-    next: {
-      revalidate: 30,
-    },
+   
+      cache: "no-store",
+   
   });
 
   const result = await res.json();
@@ -33,7 +33,25 @@ export const getSingleProperty = async (id: string): Promise<IProperty> => {
 
   return result.data;
 };
+// export const getPropertyById = async (id: string) => {
+//   const res = await fetch(
+//     `${process.env.NEXT_PUBLIC_API_URL}/properties/${id}`,
+//     {
+//       cache: "no-store",
+//     },
+//   );
+
+//   if (!res.ok) {
+//     throw new Error("Failed to fetch property");
+//   }
+
+//   const result = await res.json();
+
+//   return result.data.property;
+// };
 export const getPropertyById = async (id: string) => {
+  console.log("Fetching:", `${process.env.NEXT_PUBLIC_API_URL}/properties/${id}`);
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/properties/${id}`,
     {
@@ -41,11 +59,11 @@ export const getPropertyById = async (id: string) => {
     },
   );
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch property");
-  }
+  console.log("Status:", res.status);
 
   const result = await res.json();
+
+  console.log(result);
 
   return result.data.property;
 };

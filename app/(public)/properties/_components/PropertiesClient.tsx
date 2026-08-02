@@ -25,7 +25,7 @@ export default function PropertiesClient({
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 6;
-
+console.log(properties);
   const filteredProperties = useMemo(() => {
     let data = [...properties];
 

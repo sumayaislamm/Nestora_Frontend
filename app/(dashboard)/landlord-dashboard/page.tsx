@@ -79,7 +79,7 @@ export default function LandlordDashboard() {
                   View All Properties
                 </button>
               </Link>
-              <Link href="/landlord-dashboard/rental-requests">
+              <Link href="/landlord-dashboard/requests">
                 <button className="w-full px-4 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-primary transition font-medium">
                   Review Requests
                 </button>

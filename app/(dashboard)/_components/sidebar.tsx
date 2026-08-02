@@ -122,14 +122,9 @@ export const adminSidebarItems: SidebarItem[] = [
     icon: <Building2 size={20} />,
   },
   {
-    label: "Manage Categories",
-    href: "/admin-dashboard/manage-categories",
-    icon: <Layers size={20} />,
-  },
-  {
-    label: "Ban / Unban Users",
-    href: "/admin-dashboard/ban-users",
-    icon: <Ban size={20} />,
+    label: "Rental Requests",
+    href: "/admin-dashboard/manage-rentals",
+    icon: <FileText size={20} />,
   },
   {
     label: "Analytics",

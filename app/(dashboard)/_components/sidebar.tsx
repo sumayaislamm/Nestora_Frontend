@@ -6,20 +6,13 @@ import {
   Home,
   Building2,
   Plus,
-  Edit,
-  Trash2,
   FileText,
-  CheckCircle,
   Users,
   Layers,
   Ban,
   BarChart3,
   ClipboardList,
-  DollarSign,
   History,
-  User,
-  Menu,
-  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -37,59 +30,25 @@ interface SidebarProps {
 
 export function Sidebar({ items, title }: SidebarProps) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
 
   return (
     <>
-      <div className="bg-red-500 p-4 text-white md:hidden">TEST</div>
-      {/* Mobile Header */}
-      <div className="sticky top-0 z-50 flex items-center justify-between border-b bg-slate-900 p-4 text-white md:hidden">
-        <h1 className="text-xl font-bold">{title}</h1>
-
-        <button onClick={() => setOpen(true)}>
-          <Menu size={28} />
-        </button>
-      </div>
-
-      {/* Overlay */}
-      {open && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 md:hidden"
-          onClick={() => setOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          "fixed left-0 top-0 z-50 h-screen w-64 bg-slate-900 p-6 text-white transition-transform duration-300",
-          open ? "translate-x-0" : "-translate-x-full",
-          "md:translate-x-0 md:static md:block",
-        )}
-      >
-        <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">{title}</h1>
-
-          <button className="md:hidden" onClick={() => setOpen(false)}>
-            <X size={24} />
-          </button>
-        </div>
+      <aside className="h-full w-85 bg-slate-900 p-6 text-white">
+        <h1 className="mb-8 text-2xl font-bold">{title}</h1>
 
         <nav className="space-y-2">
           {items.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              onClick={() => setOpen(false)}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-4 py-3 transition-colors",
+                "flex items-center gap-3 rounded-lg px-4 py-3",
                 pathname === item.href
                   ? "bg-primary text-white"
                   : "text-gray-300 hover:bg-slate-800",
               )}
             >
-              <span>{item.icon}</span>
-
+              {item.icon}
               <span>{item.label}</span>
             </Link>
           ))}

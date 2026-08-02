@@ -20,3 +20,36 @@ export async function createPayment(
 
   return res.json();
 }
+
+export async function getMyPayments(token: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/payments`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+      cache: "no-store",
+    }
+  );
+
+  return res.json();
+}
+
+
+export async function getSinglePayment(
+  id: string,
+  token: string
+) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/payments/${id}`,
+    {
+      headers: {
+        Authorization: token,
+      },
+      cache: "no-store",
+    }
+  );
+
+  return res.json();
+}

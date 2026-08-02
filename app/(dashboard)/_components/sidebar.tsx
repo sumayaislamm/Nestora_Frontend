@@ -102,21 +102,11 @@ export const tenantSidebarItems: SidebarItem[] = [
     href: '/tenant-dashboard/reviews',
     icon: <FileText size={20} />,
   },
-  // {
-  //   label: 'Payment',
-  //   href: '/tenant-dashboard/payment',
-  //   icon: <DollarSign size={20} />,
-  // },
   {
     label: 'Payment History',
-    href: '/tenant-dashboard/payment-history',
+    href: '/tenant-dashboard/payments',
     icon: <History size={20} />,
-  },
-  // {
-  //   label: 'Profile',
-  //   href: '/tenant-dashboard/profile',
-  //   icon: <User size={20} />,
-  // },
+  }
 ]
 
 export const adminSidebarItems: SidebarItem[] = [

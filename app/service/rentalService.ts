@@ -65,3 +65,29 @@ export async function updateRentalRequestStatus(
 
   return res.json();
 }
+
+
+// tenant rental history
+
+export async function getMyRentals(token: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/rentals`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+      cache: "no-store",
+    }
+  );
+
+  const result = await res.json();
+
+  if (!res.ok) {
+    throw new Error(
+      result.message || "Failed to fetch rentals"
+    );
+  }
+
+  return result;
+}

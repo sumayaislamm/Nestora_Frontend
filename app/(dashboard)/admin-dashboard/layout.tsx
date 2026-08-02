@@ -10,10 +10,9 @@ import {
 import {
   Sidebar,
   adminSidebarItems,
-  landlordSidebarItems,
 } from "../_components/sidebar";
 
-export default function LandlordLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;

@@ -151,8 +151,8 @@ npm run start
 | Role | Email | Password |
 |---|---|---|
 | Admin | `admin@rentnest.com` | `admin123` |
-| Landlord | _(add sample landlord email)_ | _(add password)_ |
-| Tenant | _(add sample tenant email)_ | _(add password)_ |
+| Landlord | `landlord22@gmail.com` |`123456` |
+| Tenant | `hello@gmail.com` | `123456` |
 
 ---
 
@@ -173,6 +173,5 @@ See [`API_INTEGRATION.md`](./API_INTEGRATION.md) for the full mapping of fronten
 
 ## 📦 Deployment
 
-Recommended: [Vercel](https://vercel.com)
+[Vercel]  (https://vercel.com)
 
-Make sure to set the same environment variables (`BACKEND_API_URL`, `NEXT_PUBLIC_API_URL`, `JWT_SECRET`, `JWT_REFRESH_SECRET`) in your Vercel project settings.

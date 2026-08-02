@@ -81,7 +81,7 @@ export const landlordSidebarItems: SidebarItem[] = [
   },
   {
     label: 'Rental Requests',
-    href: '/landlord-dashboard/rental-requests',
+    href: '/landlord-dashboard/requests',
     icon: <FileText size={20} />,
   }
 ]
@@ -94,29 +94,29 @@ export const tenantSidebarItems: SidebarItem[] = [
   },
   {
     label: 'My Rent Requests',
-    href: '/tenant-dashboard/rent-requests',
+    href: '/tenant-dashboard/requests',
     icon: <ClipboardList size={20} />,
   },
   {
     label: 'Rent Details',
-    href: '/tenant-dashboard/rent-details',
+    href: '/tenant-dashboard/reviews',
     icon: <FileText size={20} />,
   },
-  {
-    label: 'Payment',
-    href: '/tenant-dashboard/payment',
-    icon: <DollarSign size={20} />,
-  },
+  // {
+  //   label: 'Payment',
+  //   href: '/tenant-dashboard/payment',
+  //   icon: <DollarSign size={20} />,
+  // },
   {
     label: 'Payment History',
     href: '/tenant-dashboard/payment-history',
     icon: <History size={20} />,
   },
-  {
-    label: 'Profile',
-    href: '/tenant-dashboard/profile',
-    icon: <User size={20} />,
-  },
+  // {
+  //   label: 'Profile',
+  //   href: '/tenant-dashboard/profile',
+  //   icon: <User size={20} />,
+  // },
 ]
 
 export const adminSidebarItems: SidebarItem[] = [

@@ -1,4 +1,4 @@
-import PropertyGallery from "./_components/PropertyGallery";
+
 import PropertyInfo from "./_components/PropertyInfo";
 import Amenities from "./_components/Amenities";
 import LandlordCard from "./_components/LandlordCard";
@@ -18,7 +18,6 @@ export default async function PropertyDetailsPage({
   return (
     <main className="container mx-auto py-10">
 
-      <PropertyGallery property={property} />
 
       <div className="mt-10 grid gap-10 lg:grid-cols-3">
 

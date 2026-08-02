@@ -1,7 +1,6 @@
 'use client'
 
-
-
+import Link from "next/link"
 
 export default function LandlordDashboard() {
   return (
@@ -66,22 +65,25 @@ export default function LandlordDashboard() {
           </div>
         </div>
 
-      
-        
-
           {/* Quick Actions */}
           <div className="bg-white p-6 rounded-lg shadow mt-4">
             <h3 className="text-lg font-semibold text-center text-primary mb-4">Quick Actions</h3>
-            <div className="space-y-3">
+            <div className="flex flex-col gap-4">
+              <Link className="w-full" href="/landlord-dashboard/add-property">
               <button className="w-full px-4 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-primary transition font-medium">
                 Add New Property
               </button>
-              <button className="w-full px-4 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-primary transition font-medium">
-                View All Properties
-              </button>
-              <button className="w-full px-4 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-primary transition font-medium">
-                Review Requests
-              </button>
+              </Link>
+              <Link href="/landlord-dashboard/my-properties">
+                <button className="w-full px-4 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-primary transition font-medium">
+                  View All Properties
+                </button>
+              </Link>
+              <Link href="/landlord-dashboard/rental-requests">
+                <button className="w-full px-4 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-primary transition font-medium">
+                  Review Requests
+                </button>
+              </Link>
             </div>
           </div>
       </main>

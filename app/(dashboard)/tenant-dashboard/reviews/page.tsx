@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createReview } from "@/app/service/reviewService";
+import { createReviewAction } from "./_actions/createReviewAction";
 
 export default function TenantReview() {
   const [propertyId, setPropertyId] = useState("");
@@ -14,33 +14,33 @@ export default function TenantReview() {
 
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
+const handleSubmit = async () => {
+  try {
+    setLoading(true);
 
-      const token = localStorage.getItem("accessToken");
+    const res = await createReviewAction({
+      propertyId,
+      rating,
+      comment,
+    });
 
-      await createReview(
-        {
-          propertyId,
-          rating,
-          comment,
-        },
-        token!,
-      );
-
-      toast.success("Review submitted successfully");
-
-      setPropertyId("");
-      setComment("");
-      setRating(5);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
+    if (!res.success) {
+      toast.error(res.message);
+      return;
     }
-  };
+
+    toast.success("Review submitted successfully");
+
+    setPropertyId("");
+    setComment("");
+    setRating(5);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    toast.error(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="max-w-xl space-y-6">

@@ -1,7 +1,5 @@
 import { getAllProperties, getAllPropertiesSearch } from "@/app/service/propertyService";
-import { getPropertiesAction } from "../_actions/propertyActions";
 import PropertiesClient from "./_components/PropertiesClient";
-import PropertyGrid from "./_components/PropertyGrid";
 import SearchBar from "./_components/SearchBar";
 
 

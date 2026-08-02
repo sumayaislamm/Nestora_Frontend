@@ -40,16 +40,6 @@ export default function PropertyCard({ property }: Props) {
         >
           <Heart className="h-4 w-4" />
         </Button>
-
-        {/* <Badge
-          className={`absolute bottom-3 left-3 ${
-            property.availability === "AVAILABLE"
-              ? "bg-green-600 hover:bg-green-600"
-              : "bg-red-600 hover:bg-red-600"
-          }`}
-        >
-          {property.availability}
-        </Badge> */}
         <Badge
           className={`absolute bottom-3 left-3 ${
             property.availability === "AVAILABLE"

@@ -5,7 +5,7 @@ import { createPayment } from "@/app/service/paymentService";
 
 export async function createPaymentAction(
   rentalRequestId: string,
-  provider: "STRIPE" | "SSLCOMMERZ"
+  provider: "STRIPE" 
 ) {
   const token = (await cookies()).get("accessToken")?.value;
 

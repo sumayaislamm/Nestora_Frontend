@@ -1,46 +1,4 @@
-// "use client";
 
-// import { Button } from "@/components/ui/button";
-// import { toast } from "sonner";
-// import { createPaymentAction } from "../_actions/createPaymentAction";
-
-// export default function PaymentButton({
-//   rentalRequestId,
-// }: {
-//   rentalRequestId: string;
-// }) {
-
-//  async function handlePayment() {
-//   const res = await createPaymentAction(
-//     rentalRequestId,
-//     "STRIPE"
-//   );
-
-//   console.log("FULL RESPONSE:", res);
-
-//   if (!res.success) {
-//     toast.error(res.errorDetails || res.message);
-//     return;
-//   }
-
-//   const checkoutUrl = res.data?.payment?.checkoutUrl;
-
-//   console.log("CHECKOUT URL:", checkoutUrl);
-
-//   if (!checkoutUrl) {
-//     toast.error("Checkout URL not found");
-//     return;
-//   }
-
-//   window.location.href = checkoutUrl;
-// }
-
-//   return (
-//     <Button onClick={handlePayment} className="w-full">
-//       Pay with Stripe
-//     </Button>
-//   );
-// }
 
 "use client";
 

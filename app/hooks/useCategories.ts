@@ -1,40 +1,3 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import { ICategory } from "../types/category";
-
-// export function useCategories() {
-//   const [categories, setCategories] = useState<ICategory[]>([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     async function load() {
-//       try {
-//         const res = await fetch(
-//           `${process.env.NEXT_PUBLIC_API_URL}/categories`
-//         );
-
-//         const result = await res.json();
-
-//         console.log(result);
-
-//         setCategories(result.data.categories ?? []);
-//       } catch (err) {
-//         console.error(err);
-//         setCategories([]);
-//       } finally {
-//         setLoading(false);
-//       }
-//     }
-
-//     load();
-//   }, []);
-
-//   return {
-//     categories,
-//     loading,
-//   };
-// }
 
 "use client";
 
@@ -54,7 +17,7 @@ export function useCategories() {
 
         const result = await res.json();
 
-        // Handles {data:{categories:[]}} OR {data:[]} OR {categories:[]} OR raw []
+     
         const list =
           result?.data?.categories ??
           result?.data ??

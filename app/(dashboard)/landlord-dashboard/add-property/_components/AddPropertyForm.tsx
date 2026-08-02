@@ -106,6 +106,8 @@ export default function AddPropertyForm() {
       "i.ibb.co",
       "images.unsplash.com",
       "res.cloudinary.com",
+      "plus.unsplash.com",
+       "i.ibb.co.com"
     ];
 
     if (!allowedHosts.includes(url.hostname)) {
@@ -298,9 +300,6 @@ export default function AddPropertyForm() {
           </SelectContent>
         </Select>
 
-        {/* <p className="mt-1 text-sm text-red-500">
-          {errors.categoryId?.message}
-        </p> */}
       </div>
       {/* Images */}
       <div>
@@ -358,7 +357,7 @@ export default function AddPropertyForm() {
           <span className="font-medium text-green-600">
             Supported hosts:
           </span>{" "}
-          ImgBB, Cloudinary, Unsplash
+          ImgBB, Cloudinary, Unsplash 
         </p>
       </div>
 

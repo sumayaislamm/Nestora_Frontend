@@ -2,7 +2,6 @@
 import { IProperty } from "@/app/types/property";
 import { revalidatePath } from "next/cache";
 
-import { ICreateProperty } from "../types/property";
 
 const BASE_URL = process.env.BACKEND_API_URL;
 
@@ -15,14 +14,9 @@ export const getAllProperties = async (): Promise<IProperty[]> => {
 
   const result = await res.json();
 
-  //   const result = await res.json();
-
-  // console.log("RESULT =", result);
-  // console.log("RESULT.DATA =", result.data);
 
   return result.data.data;
 
-  //   return result.data;
 };
 
 export const getSingleProperty = async (id: string): Promise<IProperty> => {
@@ -134,31 +128,6 @@ export const deleteProperty = async (id: string, token: string) => {
 };
 
 // edit property
-// export const updateProperty = async (
-//   id: string,
-//   data: any,
-//   token: string
-// ) => {
-//   const res = await fetch(`${BASE_URL}/api/properties/${id}`, {
-//     method: "PATCH",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${token}`,
-//     },
-//     body: JSON.stringify(data),
-//   });
-
-//   const result = await res.json();
-
-//   console.log("STATUS =", res.status);
-//   console.log("RESULT =", result);
-
-//   if (!res.ok) {
-//     throw new Error(result.message || "Update failed");
-//   }
-
-//   return result;
-// };
 
 export const updateProperty = async (
   id: string,

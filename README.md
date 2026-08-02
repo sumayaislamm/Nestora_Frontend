@@ -151,8 +151,8 @@ npm run start
 | Role | Email | Password |
 |---|---|---|
 | Admin | `admin@rentnest.com` | `admin123` |
-| Landlord | `landlord22@gmail.com` |`123456` |
-| Tenant | `hello@gmail.com` | `123456` |
+| Landlord | `landlordnestora@gmail.com` |`123456` |
+| Tenant | `tenantnestora@gmail.com` | `123456` |
 
 ---
 

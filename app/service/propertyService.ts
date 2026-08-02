@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IProperty } from "@/app/types/property";
 import { revalidatePath } from "next/cache";
 
@@ -31,24 +32,9 @@ export const getSingleProperty = async (id: string): Promise<IProperty> => {
 
   const result = await res.json();
 
-  return result.data;
+  return result.data.property;
 };
-// export const getPropertyById = async (id: string) => {
-//   const res = await fetch(
-//     `${process.env.NEXT_PUBLIC_API_URL}/properties/${id}`,
-//     {
-//       cache: "no-store",
-//     },
-//   );
 
-//   if (!res.ok) {
-//     throw new Error("Failed to fetch property");
-//   }
-
-//   const result = await res.json();
-
-//   return result.data.property;
-// };
 export const getPropertyById = async (id: string) => {
   console.log("Fetching:", `${process.env.NEXT_PUBLIC_API_URL}/properties/${id}`);
 
@@ -86,27 +72,7 @@ export const getAllPropertiesSearch = async (query: Record<string, string>) => {
 
 // Landlord Dashboard Property Service
 
-// export const createProperty = async (
-//   payload: ICreateProperty,
-//   token: string
-// ) => {
-//   const res = await fetch(
-//     `${BASE_URL}/api/properties`,
-//     {
-//       method: "POST",
 
-//       headers: {
-//         "Content-Type": "application/json",
-//         // Authorization: token,
-//         Authorization: `Bearer ${token}`
-//       },
-
-//       body: JSON.stringify(payload),
-//     }
-//   );
-
-//   return res.json();
-// };
 
 export const createProperty = async (
   data: Record<string, unknown>,
@@ -168,12 +134,39 @@ export const deleteProperty = async (id: string, token: string) => {
 };
 
 // edit property
+// export const updateProperty = async (
+//   id: string,
+//   data: any,
+//   token: string
+// ) => {
+//   const res = await fetch(`${BASE_URL}/api/properties/${id}`, {
+//     method: "PATCH",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`,
+//     },
+//     body: JSON.stringify(data),
+//   });
+
+//   const result = await res.json();
+
+//   console.log("STATUS =", res.status);
+//   console.log("RESULT =", result);
+
+//   if (!res.ok) {
+//     throw new Error(result.message || "Update failed");
+//   }
+
+//   return result;
+// };
+
 export const updateProperty = async (
   id: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any,
-  token: string,
+  token: string
 ) => {
+  console.log("PATCH URL =", `${BASE_URL}/api/properties/${id}`);
+
   const res = await fetch(`${BASE_URL}/api/properties/${id}`, {
     method: "PATCH",
     headers: {
@@ -183,9 +176,15 @@ export const updateProperty = async (
     body: JSON.stringify(data),
   });
 
+  console.log("STATUS =", res.status);
+
+  const result = await res.json();
+
+  console.log("RESULT =", result);
+
   if (!res.ok) {
-    throw new Error("Update failed");
+    throw new Error(result.message);
   }
 
-  return res.json();
+  return result;
 };

@@ -8,6 +8,7 @@ export async function updatePropertyAction(
   id: string,
   payload: any
 ) {
+  console.log("ACTION ID =", id);
   const token =
     (await cookies()).get("accessToken")?.value;
 

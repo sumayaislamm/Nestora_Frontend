@@ -13,7 +13,7 @@ export default function TenantLayout({
     <div className="min-h-screen">
       {/* Mobile Header */}
       <header className="flex items-center justify-between border-b p-4 lg:hidden">
-        <h1 className="text-xl font-bold">Landlord</h1>
+        <h1 className="text-xl font-bold">Tenant</h1>
 
         <Sheet>
           <SheetTrigger className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 transition">

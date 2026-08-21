@@ -15,18 +15,7 @@ const STATS = [
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[700px] overflow-hidden border-b border-border">
-      {/* <section className="relative h-[600px] overflow-hidden"> */}
-      {/* Background Video */}
-      {/* <video
-        className="absolute inset-0 h-full w-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-      >
-       <source src="/videos/16528749_3840_2160_24fps.mp4" type="video/mp4" />
-      </video> */}
+    <section className="relative overflow-hidden border-b border-border">
 
       <video
         className="absolute inset-0 z-0 h-full w-full object-cover"
@@ -39,8 +28,6 @@ export function HeroSection() {
       </video>
 
       {/* Dark overlay */}
-      {/* <div className="absolute inset-0 bg-black/50" />
-       */}
        <div className="absolute inset-0 z-10 bg-black/50" />
 
       {/* Ambient backdrop */}
@@ -49,7 +36,6 @@ export function HeroSection() {
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_75%_-10%,color-mix(in_oklch,var(--primary),transparent_84%),transparent)]"
       />
 
-      {/* <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-28 lg:px-8"> */}
         
         <div className="relative z-20 mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-28 lg:px-8">
           {/* Left: thesis */}
@@ -71,30 +57,10 @@ export function HeroSection() {
             way of your next move.
           </p>
 
-          {/* Search bar — the hero's single characteristic action */}
-          {/* <div className="mt-8 flex flex-col gap-2 rounded-xl border border-border bg-card p-2 shadow-sm sm:flex-row sm:items-center">
-            <div className="flex flex-1 items-center gap-2 px-2 py-1.5">
-              <MapPin className="size-4 shrink-0 text-muted-foreground" />
-              <Input
-                placeholder="Search by city or neighborhood"
-                className="h-auto border-none bg-transparent p-0 text-sm shadow-none focus-visible:ring-0"
-              />
-            </div>
-            <div className="hidden h-6 w-px bg-border sm:block" />
-            <div className="flex items-center gap-2 px-2 py-1.5 sm:w-44">
-              <HomeIcon className="size-4 shrink-0 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
-                Any property type
-              </span>
-            </div>
-            <Button size="lg" className="gap-1.5 sm:w-auto">
-              <Search className="size-4" />
-              Search
-            </Button>
-          </div> */}
+    
 
           {/* Stats */}
-          <dl className="mt-10 flex flex-wrap gap-5 w-80 p-10">
+          <dl className="mt-10 flex flex-wrap gap-x-10 w-92 bg-card p-5 rounded-lg shadow-sm">
             {STATS.map((stat) => (
               <div key={stat.label}>
                 <dt className="font-heading text-2xl font-medium text-base-foreground">
@@ -116,6 +82,7 @@ export function HeroSection() {
             beds={1}
             baths={1}
             area={480}
+            image="https://i.ibb.co.com/nqrbm4LC/pexels-valeria-drozdova-2148646707-38934658.jpg"
           />
           <ListingCard
             className="absolute right-0 top-0 w-64 rotate-3"
@@ -125,7 +92,7 @@ export function HeroSection() {
             beds={3}
             baths={2}
             area={1150}
-            image="/images/listing-2.jpg"
+            image="https://i.ibb.co.com/SXrhFY1t/pexels-egorkomarov-12061813.jpg"
           />
           <ListingCard
             className="absolute bottom-2 left-14 w-64 rotate-1"
@@ -135,7 +102,7 @@ export function HeroSection() {
             beds={4}
             baths={3}
             area={2100}
-            image="/images/listing-3.jpg"
+            image="https://i.ibb.co.com/7JwnD6bD/pexels-brayan-ramirez-1648892253-34478703.jpg"
           />
         </div>
       </div>
@@ -151,6 +118,7 @@ function ListingCard({
   beds,
   baths,
   area,
+  image,
 }: {
   className?: string;
   title: string;
@@ -166,7 +134,15 @@ function ListingCard({
       className={`rounded-xl border border-border bg-card p-3 shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:rotate-0 ${className}`}
     >
       <div className="mb-3 flex h-24 items-center justify-center rounded-lg bg-[linear-gradient(135deg,color-mix(in_oklch,var(--primary),transparent_82%),color-mix(in_oklch,var(--primary),transparent_94%))]">
-        <HomeIcon className="size-7 text-primary/60" />
+        {image ? (
+          <img
+            src={image}
+            alt={title}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <HomeIcon className="size-7 text-primary/60" />
+        )}
       </div>
       <p className="font-heading text-sm font-medium text-foreground">
         {title}

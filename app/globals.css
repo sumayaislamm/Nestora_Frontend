@@ -218,3 +218,28 @@
 .card-from-right {
   animation: cardFromRight 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.7s both;
 }
+
+
+/* Loading Animation  */
+
+@keyframes nestoraCar {
+  0% {
+    transform: translateX(-140px);
+  }
+
+  35% {
+    transform: translateX(calc(50vw - 48px));
+  }
+
+  55% {
+    transform: translateX(calc(50vw - 48px));
+  }
+
+  100% {
+    transform: translateX(calc(100vw + 140px));
+  }
+}
+
+.car-loader {
+  animation: nestoraCar 10s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}

@@ -132,4 +132,89 @@
 }
 
 
+/* dl animation  */
+@keyframes cardFlipUp {
+  0% {
+    transform: translateY(120px) rotateX(70deg);
+  }
 
+  60% {
+    transform: translateY(-8px) rotateX(-5deg);
+  }
+
+  100% {
+    transform: translateY(0) rotateX(0deg);
+  }
+}
+
+.card-flip-up {
+  animation: cardFlipUp 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-origin: bottom center;
+  transform-style: preserve-3d;
+}
+
+
+/* Listing Card Animation  */
+
+@keyframes cardFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-180px) translateY(60px) rotate(-18deg) scale(0.9);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateX(10px) translateY(-5px) rotate(-4deg) scale(1.02);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) rotate(-6deg) scale(1);
+  }
+}
+
+@keyframes cardFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-180px) rotate(15deg) scale(0.9);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(10px) rotate(6deg) scale(1.02);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(3deg) scale(1);
+  }
+}
+
+@keyframes cardFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(180px) translateY(60px) rotate(18deg) scale(0.9);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateX(-10px) translateY(-5px) rotate(4deg) scale(1.02);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) rotate(1deg) scale(1);
+  }
+}
+
+.card-from-left {
+  animation: cardFromLeft 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+.card-from-top {
+  animation: cardFromTop 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
+}
+
+.card-from-right {
+  animation: cardFromRight 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.7s both;
+}

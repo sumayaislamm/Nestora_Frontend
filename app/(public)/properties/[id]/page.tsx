@@ -17,14 +17,11 @@ export default async function PropertyDetailsPage({
   return (
     <main className="container mx-auto py-10 px-20">
       <PropertyGallery images={property.images} />
-
       <div className="mt-10 grid gap-10 lg:grid-cols-3">
         <div className="space-y-8 lg:col-span-2">
           <PropertyInfo property={property} />
-
           <Amenities amenities={property.amenities} />
         </div>
-
         <div className="space-y-6">
           <LandlordCard landlord={property.landlord} />
 

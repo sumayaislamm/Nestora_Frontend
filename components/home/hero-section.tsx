@@ -1,6 +1,11 @@
-import { Search, MapPin, Home as HomeIcon, Bed, Bath, Square } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+  Search,
+  MapPin,
+  Home as HomeIcon,
+  Bed,
+  Bath,
+  Square,
+} from "lucide-react";
 
 const STATS = [
   { value: "2,400+", label: "Listings live" },
@@ -10,35 +15,64 @@ const STATS = [
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden border-b border-border bg-background">
+    <section className="relative min-h-[700px] overflow-hidden border-b border-border">
+      {/* <section className="relative h-[600px] overflow-hidden"> */}
+      {/* Background Video */}
+      {/* <video
+        className="absolute inset-0 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+      >
+       <source src="/videos/16528749_3840_2160_24fps.mp4" type="video/mp4" />
+      </video> */}
+
+      <video
+        className="absolute inset-0 z-0 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+      >
+        <source src="/videos/16528749_3840_2160_24fps.mp4" type="video/mp4" />
+      </video>
+
+      {/* Dark overlay */}
+      {/* <div className="absolute inset-0 bg-black/50" />
+       */}
+       <div className="absolute inset-0 z-10 bg-black/50" />
+
       {/* Ambient backdrop */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_75%_-10%,color-mix(in_oklch,var(--primary),transparent_84%),transparent)]"
       />
 
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-28 lg:px-8">
-        {/* Left: thesis */}
+      {/* <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-28 lg:px-8"> */}
+        
+        <div className="relative z-20 mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-28 lg:px-8">
+          {/* Left: thesis */}
         <div>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-[0.7rem] font-medium tracking-wide text-secondary-foreground uppercase">
             Renting, without the runaround
           </span>
 
-          <h1 className="mt-6 font-heading text-4xl leading-[1.05] font-medium text-foreground sm:text-5xl lg:text-6xl">
+          <h1 className="mt-6 font-heading text-4xl leading-[1.05] font-medium text-white sm:text-5xl lg:text-6xl">
             Find a place that
             <br />
             actually feels like{" "}
-            <span className="italic text-primary">home.</span>
+            <span className="italic text-blue-500">home.</span>
           </h1>
 
-          <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground">
+          <p className="mt-6 max-w-md text-blue-300 leading-relaxed ">
             Nestora connects tenants directly with landlords — verified
-            listings, transparent pricing, and no middleman fees getting in
-            the way of your next move.
+            listings, transparent pricing, and no middleman fees getting in the
+            way of your next move.
           </p>
 
           {/* Search bar — the hero's single characteristic action */}
-          <div className="mt-8 flex flex-col gap-2 rounded-xl border border-border bg-card p-2 shadow-sm sm:flex-row sm:items-center">
+          {/* <div className="mt-8 flex flex-col gap-2 rounded-xl border border-border bg-card p-2 shadow-sm sm:flex-row sm:items-center">
             <div className="flex flex-1 items-center gap-2 px-2 py-1.5">
               <MapPin className="size-4 shrink-0 text-muted-foreground" />
               <Input
@@ -49,19 +83,21 @@ export function HeroSection() {
             <div className="hidden h-6 w-px bg-border sm:block" />
             <div className="flex items-center gap-2 px-2 py-1.5 sm:w-44">
               <HomeIcon className="size-4 shrink-0 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Any property type</span>
+              <span className="text-sm text-muted-foreground">
+                Any property type
+              </span>
             </div>
             <Button size="lg" className="gap-1.5 sm:w-auto">
               <Search className="size-4" />
               Search
             </Button>
-          </div>
+          </div> */}
 
           {/* Stats */}
-          <dl className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
+          <dl className="mt-10 flex flex-wrap gap-5 w-80 p-10">
             {STATS.map((stat) => (
               <div key={stat.label}>
-                <dt className="font-heading text-2xl font-medium text-foreground">
+                <dt className="font-heading text-2xl font-medium text-base-foreground">
                   {stat.value}
                 </dt>
                 <dd className="text-xs text-muted-foreground">{stat.label}</dd>
@@ -89,6 +125,7 @@ export function HeroSection() {
             beds={3}
             baths={2}
             area={1150}
+            image="/images/listing-2.jpg"
           />
           <ListingCard
             className="absolute bottom-2 left-14 w-64 rotate-1"
@@ -98,6 +135,7 @@ export function HeroSection() {
             beds={4}
             baths={3}
             area={2100}
+            image="/images/listing-3.jpg"
           />
         </div>
       </div>
@@ -121,6 +159,7 @@ function ListingCard({
   beds: number;
   baths: number;
   area: number;
+  image?: string;
 }) {
   return (
     <div
@@ -129,16 +168,27 @@ function ListingCard({
       <div className="mb-3 flex h-24 items-center justify-center rounded-lg bg-[linear-gradient(135deg,color-mix(in_oklch,var(--primary),transparent_82%),color-mix(in_oklch,var(--primary),transparent_94%))]">
         <HomeIcon className="size-7 text-primary/60" />
       </div>
-      <p className="font-heading text-sm font-medium text-foreground">{title}</p>
+      <p className="font-heading text-sm font-medium text-foreground">
+        {title}
+      </p>
       <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
         <MapPin className="size-3" /> {location}
       </p>
       <div className="mt-2 flex items-center gap-3 text-[0.7rem] text-muted-foreground">
-        <span className="flex items-center gap-1"><Bed className="size-3" /> {beds}</span>
-        <span className="flex items-center gap-1"><Bath className="size-3" /> {baths}</span>
-        <span className="flex items-center gap-1"><Square className="size-3" /> {area} sqft</span>
+        <span className="flex items-center gap-1">
+          <Bed className="size-3" /> {beds}
+        </span>
+        <span className="flex items-center gap-1">
+          <Bath className="size-3" /> {baths}
+        </span>
+        <span className="flex items-center gap-1">
+          <Square className="size-3" /> {area} sqft
+        </span>
       </div>
-      <p className="mt-2 text-sm font-semibold text-primary">{price}<span className="text-xs font-normal text-muted-foreground">/mo</span></p>
+      <p className="mt-2 text-sm font-semibold text-primary">
+        {price}
+        <span className="text-xs font-normal text-muted-foreground">/mo</span>
+      </p>
     </div>
   );
 }

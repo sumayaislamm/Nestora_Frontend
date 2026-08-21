@@ -10,7 +10,7 @@ const validImages = (images || []).filter(
 );
  if (validImages.length === 0) {
     return (
-      <div className="flex h-[400px] w-full items-center justify-center rounded-2xl bg-muted text-muted-foreground">
+      <div className="flex h-100 w-full items-center justify-center rounded-2xl bg-muted text-muted-foreground">
         No images available
       </div>
     );
@@ -19,7 +19,7 @@ const validImages = (images || []).filter(
   return (
     <div className="space-y-3">
       {/* Main image */}
-      <div className="relative h-[400px] w-full overflow-hidden rounded-2xl border">
+      <div className="relative h-100 w-full overflow-hidden rounded-2xl border">
         <Image
           src={validImages[activeIndex]}
           alt="Property image"
@@ -36,7 +36,7 @@ const validImages = (images || []).filter(
             <button
               key={idx}
               onClick={() => setActiveIndex(idx)}
-              className={`relative h-20 w-28 flex-shrink-0 overflow-hidden rounded-lg border-2 ${
+              className={`relative h-20 w-28 shrink-0 overflow-hidden rounded-lg border-2 ${
                 idx === activeIndex ? "border-primary" : "border-transparent"
               }`}
             >

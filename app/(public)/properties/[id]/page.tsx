@@ -15,7 +15,7 @@ export default async function PropertyDetailsPage({
   const property = await getPropertyById(id);
 
   return (
-    <main className="container mx-auto py-10">
+    <main className="container mx-auto py-10 px-10">
       <PropertyGallery images={property.images} />
 
       <div className="mt-10 grid gap-10 lg:grid-cols-3">

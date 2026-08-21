@@ -148,7 +148,7 @@
 }
 
 .card-flip-up {
-  animation: cardFlipUp 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: cardFlipUp 1.8s cubic-bezier(0.22, 1, 0.36, 1) 10s both;
   transform-origin: bottom center;
   transform-style: preserve-3d;
 }
@@ -208,15 +208,15 @@
 }
 
 .card-from-left {
-  animation: cardFromLeft 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+  animation: cardFromLeft 1.5s cubic-bezier(0.22, 1, 0.36, 1) 10.2s both;
 }
 
 .card-from-top {
-  animation: cardFromTop 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
+  animation: cardFromTop 1.5s cubic-bezier(0.22, 1, 0.36, 1) 10.45s both;
 }
 
 .card-from-right {
-  animation: cardFromRight 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.7s both;
+  animation: cardFromRight 1.5s cubic-bezier(0.22, 1, 0.36, 1) 10.7s both;
 }
 
 

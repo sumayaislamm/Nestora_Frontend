@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -84,7 +83,7 @@ const headerVariants: Variants = {
 
 export function WhyChooseUs() {
   return (
-    <section className="relative overflow-hidden border-b border-border bg-background py-20 sm:py-24 lg:py-28">
+    <section className="relative overflow-hidden border-b border-border bg-background p-2">
       {/* Background decoration */}
       <div
         aria-hidden
@@ -149,7 +148,8 @@ export function WhyChooseUs() {
 
             {/* Explore link */}
             <div className="mt-8">
-              <Link href="/properties"
+              <Link
+                href="/properties"
                 className="group inline-flex items-center gap-2 text-sm font-medium text-foreground"
               >
                 Explore verified properties

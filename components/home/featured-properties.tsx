@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import {
   ArrowUpRight,
   Bed,
@@ -66,7 +66,7 @@ const FEATURED_PROPERTIES = [
   },
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -75,7 +75,7 @@ const containerVariants = {
   },
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 35,
@@ -92,13 +92,14 @@ const cardVariants = {
 
 export function FeaturedProperties() {
   return (
-    <section className="relative overflow-hidden border-b border-border bg-background py-20 sm:py-24">
-      {/* Background decoration */}
+    <section className="relative overflow-hidden border-b border-border bg-background pb-3 sm:pt-5">
+      {/* Background Decoration */}
       <div className="pointer-events-none absolute -left-40 top-20 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
+
       <div className="pointer-events-none absolute -right-40 bottom-10 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        {/* ================= HEADER ================= */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -107,6 +108,7 @@ export function FeaturedProperties() {
           className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end"
         >
           <div className="max-w-2xl">
+            {/* Small Heading */}
             <div className="mb-3 flex items-center gap-2">
               <span className="h-px w-8 bg-primary" />
 
@@ -115,29 +117,33 @@ export function FeaturedProperties() {
               </span>
             </div>
 
+            {/* Main Heading */}
             <h2 className="font-heading text-3xl font-semibold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               Find a place you&apos;ll
               <span className="text-primary"> love to call home.</span>
             </h2>
 
+            {/* Description */}
             <p className="mt-4 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
               Explore our handpicked selection of beautiful homes in some of
               the most desirable locations.
             </p>
           </div>
 
+          {/* View All Button */}
           <Link href="/properties">
             <Button
               variant="outline"
-              className="group gap-2 rounded-full px-5 transition-all hover:bg-primary hover:text-primary-foreground"
+              className="group gap-2 rounded-full px-5 transition-all duration-300 hover:bg-primary hover:text-primary-foreground"
             >
               View all listings
-              <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+
+              <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Button>
           </Link>
         </motion.div>
 
-        {/* Properties */}
+        {/* ================= PROPERTY GRID ================= */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -146,46 +152,62 @@ export function FeaturedProperties() {
           className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
         >
           {FEATURED_PROPERTIES.map((property) => (
-            <motion.div key={property.id} variants={cardVariants}>
-              <Link href={`/properties/${property.id}`} className="block h-full">
-                <Card className="group relative h-full overflow-hidden rounded-2xl border-border/60 bg-card p-0 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
-                  {/* Image */}
+            <motion.div
+              key={property.id}
+              variants={cardVariants}
+              whileHover={{ y: -8 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Link
+                href={`/properties/${property.id}`}
+                className="block h-full"
+              >
+                <Card className="group h-full overflow-hidden rounded-2xl border-border/60 bg-card p-0 shadow-sm transition-shadow duration-500 hover:shadow-2xl">
+                  {/* ================= IMAGE ================= */}
                   <div className="relative h-60 overflow-hidden">
                     <motion.img
                       src={property.image}
                       alt={property.title}
                       className="h-full w-full object-cover"
                       whileHover={{ scale: 1.08 }}
-                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      transition={{
+                        duration: 0.6,
+                        ease: "easeOut",
+                      }}
                     />
 
-                    {/* Image overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-70" />
+                    {/* Image Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
 
-                    {/* Badge */}
+                    {/* Property Badge */}
                     <Badge className="absolute left-4 top-4 rounded-full border-0 bg-white/90 px-3 py-1 text-xs font-semibold text-foreground shadow-md backdrop-blur">
                       {property.tag}
                     </Badge>
 
-                    {/* Favorite */}
+                    {/* Favorite Button */}
                     <button
                       type="button"
                       aria-label="Save property"
-                      onClick={(e) => e.preventDefault()}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
                       className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-foreground shadow-md backdrop-blur transition-all duration-300 hover:scale-110 hover:bg-white"
                     >
-                      <Heart className="size-4 transition-colors hover:fill-red-500 hover:text-red-500" />
+                      <Heart className="size-4 transition-all duration-300 hover:fill-red-500 hover:text-red-500" />
                     </button>
 
                     {/* Location */}
                     <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-xs font-medium text-white">
                       <MapPin className="size-3.5" />
-                      {property.location}
+
+                      <span>{property.location}</span>
                     </div>
                   </div>
 
-                  {/* Content */}
+                  {/* ================= CONTENT ================= */}
                   <div className="flex flex-col gap-4 p-5">
+                    {/* Title */}
                     <div>
                       <h3 className="font-heading text-base font-semibold text-foreground transition-colors duration-300 group-hover:text-primary">
                         {property.title}
@@ -196,8 +218,8 @@ export function FeaturedProperties() {
                       </p>
                     </div>
 
-                    {/* Property stats */}
-                    <div className="flex items-center gap-4 border-y border-border/70 py-3 text-xs text-muted-foreground">
+                    {/* ================= STATS ================= */}
+                    <div className="flex items-center gap-3 border-y border-border/70 py-3 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1.5">
                         <Bed className="size-3.5" />
                         {property.beds} Beds
@@ -210,23 +232,25 @@ export function FeaturedProperties() {
 
                       <span className="flex items-center gap-1.5">
                         <Square className="size-3.5" />
-                        {property.area}
+                        {property.area} sqft
                       </span>
                     </div>
 
-                    {/* Price */}
+                    {/* ================= PRICE ================= */}
                     <div className="flex items-end justify-between">
                       <div>
                         <p className="text-lg font-bold tracking-tight text-primary">
                           ৳{property.price}
+
                           <span className="ml-1 text-xs font-normal text-muted-foreground">
                             /month
                           </span>
                         </p>
                       </div>
 
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
-                        <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      {/* Arrow Circle */}
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+                        <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                       </div>
                     </div>
                   </div>
@@ -236,7 +260,7 @@ export function FeaturedProperties() {
           ))}
         </motion.div>
 
-        {/* Bottom CTA */}
+        {/* ================= BOTTOM CTA ================= */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -250,7 +274,8 @@ export function FeaturedProperties() {
               className="group rounded-full text-sm text-muted-foreground hover:text-primary"
             >
               Explore more properties
-              <ArrowUpRight className="ml-1 size-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+
+              <ArrowUpRight className="ml-1 size-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
             </Button>
           </Link>
         </motion.div>

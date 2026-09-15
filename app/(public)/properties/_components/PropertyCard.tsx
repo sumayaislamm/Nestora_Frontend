@@ -87,7 +87,7 @@ export default function PropertyCard({ property }: Props) {
       {/* =========================
           IMAGE SECTION
       ========================== */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted">
+      <div className="relative aspect-16/10 w-full overflow-hidden bg-muted">
         {hasImage ? (
           <Image
             src={imageUrl}
@@ -99,7 +99,7 @@ export default function PropertyCard({ property }: Props) {
             priority={false}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-muted to-muted/60">
+          <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-muted to-muted/60">
             <div className="text-center">
               <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-background/70">
                 <Maximize className="h-5 w-5 text-muted-foreground" />
@@ -113,7 +113,7 @@ export default function PropertyCard({ property }: Props) {
         )}
 
         {/* Image gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/5 to-transparent" />
 
         {/* Top badges */}
         <div className="absolute left-4 right-4 top-4 flex items-start justify-between gap-3">
@@ -190,7 +190,7 @@ export default function PropertyCard({ property }: Props) {
         {/* Title */}
         <div className="mb-4">
           <Link href={`/properties/${id}`} className="block focus:outline-none">
-            <h2 className="line-clamp-2 min-h-[3.5rem] text-lg font-bold leading-7 tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary">
+            <h2 className="line-clamp-2 min-h-14 text-lg font-bold leading-7 tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary">
               {title}
             </h2>
           </Link>

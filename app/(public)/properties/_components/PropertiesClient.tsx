@@ -604,7 +604,7 @@ export default function PropertiesClient({ properties, meta }: Props) {
       {/* Empty state */}
 
       {properties.length === 0 ? (
-        <div className="flex min-h-[350px] flex-col items-center justify-center rounded-2xl border border-dashed bg-card px-6 text-center">
+        <div className="flex min-h-87.5 flex-col items-center justify-center rounded-2xl border border-dashed bg-card px-6 text-center">
           <div className="mb-4 rounded-full bg-muted p-4">
             <Search className="h-7 w-7 text-muted-foreground" />
           </div>

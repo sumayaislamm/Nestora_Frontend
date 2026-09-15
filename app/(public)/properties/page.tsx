@@ -37,7 +37,7 @@ export default async function PropertiesPage({
       </h1>
 
       <p className="mb-8 text-center text-sm text-muted-foreground">
-        <span className="font-semibold text-foreground">{meta.total}</span>{" "}
+        <span className="font-semibold text-primary">{meta.total}</span>{" "}
         properties available
       </p>
 

@@ -809,25 +809,35 @@
 
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Loader2, RotateCcw } from "lucide-react";
+import {
+  ArrowDownAZ,
+  ArrowUpAZ,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  RotateCcw,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import PropertyCard from "./PropertyCard";
 import { IProperty } from "@/app/types/property";
-import { PropertyMeta } from "@/app/service/propertyService";
-
-import FilterBar from "./FilterBar";
-import PropertyGrid from "./PropertyGrid";
-import EmptyState from "./EmptyState";
+import type { PropertyMeta } from "@/app/service/propertyService";
 
 type Props = {
   properties: IProperty[];
   meta: PropertyMeta;
-};
-
-type FilterOption = {
-  value: string;
-  label: string;
 };
 
 export default function PropertiesClient({
@@ -838,76 +848,86 @@ export default function PropertiesClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [isPending, startTransition] = useTransition();
+  /* ----------------------------- URL values ----------------------------- */
 
-  const [loadingPage, setLoadingPage] = useState<number | null>(null);
+  const search = searchParams.get("search") ?? "";
+  const categoryIdFromUrl = searchParams.get("categoryId") ?? "";
+  const availabilityFromUrl = searchParams.get("availability") ?? "";
+  const minRentFromUrl = searchParams.get("minRent") ?? "";
+  const maxRentFromUrl = searchParams.get("maxRent") ?? "";
+  const locationFromUrl = searchParams.get("location") ?? "";
+  const amenityFromUrl = searchParams.get("amenity") ?? "";
+  const sortByFromUrl = searchParams.get("sortBy") ?? "createdAt";
+  const sortOrderFromUrl = searchParams.get("sortOrder") ?? "desc";
 
-  // --------------------------------------------------
-  // Read current filters from URL
-  // --------------------------------------------------
+  const currentPage = Math.max(
+    1,
+    Number(searchParams.get("page") ?? 1),
+  );
+
+  /* ----------------------------- Local state ----------------------------- */
 
   const [availability, setAvailability] = useState(
-    searchParams.get("availability") ?? "ALL",
+    availabilityFromUrl,
   );
 
-  const [category, setCategory] = useState(
-    searchParams.get("category") ?? "ALL",
+  const [categoryId, setCategoryId] = useState(
+    categoryIdFromUrl,
   );
 
-  const [location, setLocation] = useState(
-    searchParams.get("location") ?? "ALL",
-  );
+  const [minRent, setMinRent] = useState(minRentFromUrl);
+  const [maxRent, setMaxRent] = useState(maxRentFromUrl);
 
-  const [amenity, setAmenity] = useState(
-    searchParams.get("amenity") ?? "ALL",
-  );
+  const [location, setLocation] = useState(locationFromUrl);
+  const [amenity, setAmenity] = useState(amenityFromUrl);
 
-  const [sort, setSort] = useState(
-    searchParams.get("sort") ?? "latest",
-  );
-
-  // --------------------------------------------------
-  // Price filter
-  // --------------------------------------------------
-
-  const [price, setPrice] = useState(() => {
-    const min = searchParams.get("minRent");
-    const max = searchParams.get("maxRent");
-
-    if (!min && !max) {
-      return "ALL";
+  const [sort, setSort] = useState(() => {
+    if (
+      sortByFromUrl === "rent" &&
+      sortOrderFromUrl === "asc"
+    ) {
+      return "low";
     }
 
-    if (min === "0" && max === "20000") {
-      return "0-20000";
+    if (
+      sortByFromUrl === "rent" &&
+      sortOrderFromUrl === "desc"
+    ) {
+      return "high";
     }
 
-    if (min === "20000" && max === "50000") {
-      return "20000-50000";
-    }
-
-    if (min === "50000" && max === "100000") {
-      return "50000-100000";
-    }
-
-    if (min === "100000") {
-      return "100000+";
-    }
-
-    return "ALL";
+    return "latest";
   });
 
-  // --------------------------------------------------
-  // Filter options
-  //
-  // NOTE:
-  // These are currently generated from the loaded data.
-  // Since filtering itself is now backend-side, these
-  // options are only UI options and do not perform
-  // client-side filtering.
-  // --------------------------------------------------
+  const [isLoading, setIsLoading] = useState(false);
 
-  const availabilityOptions = useMemo<FilterOption[]>(() => {
+  /* --------------------------- Update URL helper -------------------------- */
+
+  const updateQuery = (
+    key: string,
+    value: string,
+    resetPage = true,
+  ) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (value) {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+
+    if (resetPage) {
+      params.set("page", "1");
+    }
+
+    setIsLoading(true);
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  /* --------------------------- Filter options ---------------------------- */
+
+  const availabilityOptions = useMemo(() => {
     const values = Array.from(
       new Set(
         properties
@@ -916,621 +936,696 @@ export default function PropertiesClient({
       ),
     );
 
-    return values.map((value) => ({
-      value,
-      label:
-        value.charAt(0) +
-        value.slice(1).toLowerCase(),
-    }));
+    return values.sort();
   }, [properties]);
 
-  const locationOptions = useMemo<FilterOption[]>(() => {
-    const cities = Array.from(
+  const categoryOptions = useMemo(() => {
+    /**
+     * IMPORTANT:
+     * categoryId must be sent to backend.
+     *
+     * Do NOT use category.name as the value.
+     * The backend expects the category UUID.
+     */
+    const categories = Array.from(
+      new Map(
+        properties
+          .filter((property) => property.category)
+          .map((property) => [
+            property.category!.id,
+            property.category!,
+          ]),
+      ).values(),
+    ).sort((a, b) => a.name.localeCompare(b.name));
+
+    return categories;
+  }, [properties]);
+
+  const locationOptions = useMemo(() => {
+    const locations = Array.from(
       new Set(
         properties
           .map((property) => {
+            if (!property.location) return "";
+
             const parts = property.location
               .split(",")
               .map((part) => part.trim())
               .filter(Boolean);
 
-            return parts.at(-1);
+            return parts.length > 0
+              ? parts[parts.length - 1]
+              : property.location;
           })
-          .filter(
-            (city): city is string =>
-              Boolean(city),
-          ),
+          .filter(Boolean),
       ),
-    ).sort((a, b) => a.localeCompare(b));
+    );
 
-    return cities.map((city) => ({
-      value: city,
-      label: city,
-    }));
+    return locations.sort((a, b) => a.localeCompare(b));
   }, [properties]);
 
-  const categoryOptions = useMemo<FilterOption[]>(() => {
-    const categories = Array.from(
-      new Set(
-        properties
-          .map(
-            (property) =>
-              property.category?.name,
-          )
-          .filter(
-            (name): name is string =>
-              Boolean(name),
-          ),
-      ),
-    ).sort((a, b) => a.localeCompare(b));
-
-    return categories.map((categoryName) => ({
-      value: categoryName,
-      label: categoryName,
-    }));
-  }, [properties]);
-
-  const amenityOptions = useMemo<FilterOption[]>(() => {
+  const amenityOptions = useMemo(() => {
     const amenities = Array.from(
       new Set(
-        properties.flatMap(
-          (property) => property.amenities,
-        ),
+        properties
+          .flatMap((property) => property.amenities ?? [])
+          .filter(Boolean),
       ),
-    ).sort((a, b) => a.localeCompare(b));
+    );
 
-    return amenities.map((amenityName) => ({
-      value: amenityName,
-      label: amenityName,
-    }));
+    return amenities.sort((a, b) => a.localeCompare(b));
   }, [properties]);
 
-  // --------------------------------------------------
-  // Navigation
-  // --------------------------------------------------
+  /* ----------------------------- Filters -------------------------------- */
 
-  const navigate = (
-    url: string,
-    page?: number,
-  ) => {
-    if (page !== undefined) {
-      setLoadingPage(page);
-    }
-
-    startTransition(() => {
-      router.push(url);
-    });
+  const handleAvailabilityChange = (value: string) => {
+    setAvailability(value);
+    updateQuery("availability", value);
   };
 
-  // --------------------------------------------------
-  // Update URL query
-  // --------------------------------------------------
+  const handleCategoryChange = (value: string) => {
+    setCategoryId(value);
+    updateQuery("categoryId", value);
+  };
 
-  const updateQuery = (
-    key: string,
-    value: string,
+  const handleLocationChange = (value: string) => {
+    setLocation(value);
+    updateQuery("location", value);
+  };
+
+  const handleAmenityChange = (value: string) => {
+    setAmenity(value);
+    updateQuery("amenity", value);
+  };
+
+  const handleMinRentChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const params = new URLSearchParams(
-      searchParams.toString(),
-    );
+    const value = event.target.value;
 
-    if (!value || value === "ALL") {
-      params.delete(key);
+    setMinRent(value);
+  };
+
+  const handleMaxRentChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value;
+
+    setMaxRent(value);
+  };
+
+  const applyPriceFilter = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (minRent) {
+      params.set("minRent", minRent);
     } else {
-      params.set(key, value);
+      params.delete("minRent");
     }
 
-    // Every filter change starts from page 1.
+    if (maxRent) {
+      params.set("maxRent", maxRent);
+    } else {
+      params.delete("maxRent");
+    }
+
     params.set("page", "1");
 
-    navigate(
-      `${pathname}?${params.toString()}`,
-      1,
-    );
+    setIsLoading(true);
+
+    router.push(`${pathname}?${params.toString()}`);
   };
 
-  // --------------------------------------------------
-  // Availability
-  // --------------------------------------------------
+  /* ------------------------------- Sort --------------------------------- */
 
-  const handleAvailabilityChange = (
-    value: string,
-  ) => {
-    setAvailability(value);
-
-    updateQuery(
-      "availability",
-      value,
-    );
-  };
-
-  // --------------------------------------------------
-  // Category
-  // --------------------------------------------------
-
-  const handleCategoryChange = (
-    value: string,
-  ) => {
-    setCategory(value);
-
-    updateQuery(
-      "category",
-      value,
-    );
-  };
-
-  // --------------------------------------------------
-  // Location
-  // --------------------------------------------------
-
-  const handleLocationChange = (
-    value: string,
-  ) => {
-    setLocation(value);
-
-    updateQuery(
-      "location",
-      value,
-    );
-  };
-
-  // --------------------------------------------------
-  // Amenity
-  // --------------------------------------------------
-
-  const handleAmenityChange = (
-    value: string,
-  ) => {
-    setAmenity(value);
-
-    updateQuery(
-      "amenity",
-      value,
-    );
-  };
-
-  // --------------------------------------------------
-  // Sort
-  // --------------------------------------------------
-
-  const handleSortChange = (
-    value: string,
-  ) => {
+  const handleSortChange = (value: string) => {
     setSort(value);
 
-    updateQuery(
-      "sort",
-      value,
-    );
-  };
+    const params = new URLSearchParams(searchParams.toString());
 
-  // --------------------------------------------------
-  // Price
-  // --------------------------------------------------
-
-  const handlePriceChange = (
-    value: string,
-  ) => {
-    setPrice(value);
-
-    const params = new URLSearchParams(
-      searchParams.toString(),
-    );
-
-    params.delete("minRent");
-    params.delete("maxRent");
+    if (value === "low") {
+      params.set("sortBy", "rent");
+      params.set("sortOrder", "asc");
+    } else if (value === "high") {
+      params.set("sortBy", "rent");
+      params.set("sortOrder", "desc");
+    } else {
+      params.set("sortBy", "createdAt");
+      params.set("sortOrder", "desc");
+    }
 
     params.set("page", "1");
 
-    if (value === "0-20000") {
-      params.set("minRent", "0");
-      params.set("maxRent", "20000");
-    }
+    setIsLoading(true);
 
-    if (value === "20000-50000") {
-      params.set("minRent", "20000");
-      params.set("maxRent", "50000");
-    }
-
-    if (value === "50000-100000") {
-      params.set("minRent", "50000");
-      params.set("maxRent", "100000");
-    }
-
-    if (value === "100000+") {
-      params.set("minRent", "100000");
-    }
-
-    navigate(
-      `${pathname}?${params.toString()}`,
-      1,
-    );
+    router.push(`${pathname}?${params.toString()}`);
   };
 
-  // --------------------------------------------------
-  // Active filters
-  // --------------------------------------------------
+  /* ---------------------------- Clear filters ----------------------------- */
 
   const hasActiveFilters =
-    availability !== "ALL" ||
-    category !== "ALL" ||
-    location !== "ALL" ||
-    amenity !== "ALL" ||
-    price !== "ALL" ||
-    sort !== "latest" ||
-    Boolean(searchParams.get("search"));
-
-  // --------------------------------------------------
-  // Clear all filters
-  // --------------------------------------------------
+    Boolean(search) ||
+    Boolean(availability) ||
+    Boolean(categoryId) ||
+    Boolean(minRent) ||
+    Boolean(maxRent) ||
+    Boolean(location) ||
+    Boolean(amenity);
 
   const clearFilters = () => {
-    setAvailability("ALL");
-    setCategory("ALL");
-    setLocation("ALL");
-    setAmenity("ALL");
-    setPrice("ALL");
+    setAvailability("");
+    setCategoryId("");
+    setMinRent("");
+    setMaxRent("");
+    setLocation("");
+    setAmenity("");
     setSort("latest");
 
-    navigate(pathname, 1);
+    setIsLoading(true);
+
+    router.push(pathname);
   };
 
-  // --------------------------------------------------
-  // Pagination
-  // --------------------------------------------------
+  /* ----------------------------- Pagination ------------------------------ */
 
   const totalPages = Math.max(
     1,
     Math.ceil(meta.total / meta.limit),
   );
 
-  const currentPage = Math.min(
-    meta.page,
-    totalPages,
-  );
-
   const goToPage = (page: number) => {
     if (
       page < 1 ||
       page > totalPages ||
-      page === currentPage ||
-      isPending
+      page === currentPage
     ) {
       return;
     }
 
-    const params = new URLSearchParams(
-      searchParams.toString(),
-    );
+    const params = new URLSearchParams(searchParams.toString());
 
-    params.set(
-      "page",
-      String(page),
-    );
+    params.set("page", String(page));
 
-    navigate(
-      `${pathname}?${params.toString()}`,
-      page,
-    );
+    setIsLoading(true);
+
+    router.push(`${pathname}?${params.toString()}`);
   };
 
-  // --------------------------------------------------
-  // Pagination numbers
-  // --------------------------------------------------
+  const pageNumbers = useMemo(() => {
+    const pages: (number | "...")[] = [];
 
-  const paginationItems = useMemo<
-    (number | "ellipsis")[]
-  >(() => {
     if (totalPages <= 7) {
-      return Array.from(
-        { length: totalPages },
-        (_, index) => index + 1,
-      );
+      for (let page = 1; page <= totalPages; page++) {
+        pages.push(page);
+      }
+
+      return pages;
     }
 
-    const items: (
-      | number
-      | "ellipsis"
-    )[] = [1];
+    pages.push(1);
 
-    if (currentPage > 4) {
-      items.push("ellipsis");
+    if (currentPage > 3) {
+      pages.push("...");
     }
 
-    const start = Math.max(
-      2,
-      currentPage - 1,
-    );
-
+    const start = Math.max(2, currentPage - 1);
     const end = Math.min(
       totalPages - 1,
       currentPage + 1,
     );
 
-    for (
-      let page = start;
-      page <= end;
-      page++
-    ) {
-      items.push(page);
+    for (let page = start; page <= end; page++) {
+      pages.push(page);
     }
 
-    if (
-      currentPage <
-      totalPages - 3
-    ) {
-      items.push("ellipsis");
+    if (currentPage < totalPages - 2) {
+      pages.push("...");
     }
 
-    items.push(totalPages);
+    pages.push(totalPages);
 
-    return items;
-  }, [
-    currentPage,
-    totalPages,
-  ]);
+    return pages;
+  }, [currentPage, totalPages]);
+
+  /* ----------------------------- Result range ----------------------------- */
+
+  const resultStart =
+    meta.total === 0
+      ? 0
+      : (meta.page - 1) * meta.limit + 1;
+
+  const resultEnd =
+    meta.total === 0
+      ? 0
+      : Math.min(meta.page * meta.limit, meta.total);
+
+  /* -------------------------------- JSX --------------------------------- */
 
   return (
-    <div className="relative">
-      {/* -----------------------------------------
-          Navigation loading state
-      ------------------------------------------ */}
+    <section className="relative">
+      {/* Loading overlay */}
 
-      {isPending && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-background/60 pt-24 backdrop-blur-[2px]">
-          <div className="flex items-center gap-3 rounded-full border bg-background px-5 py-3 text-sm font-medium shadow-lg">
-            <Loader2 className="h-4 w-4 animate-spin text-primary" />
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm">
+          <div className="flex items-center gap-3 rounded-xl border bg-background px-5 py-4 shadow-lg">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
 
-            Loading properties...
+            <span className="text-sm font-medium">
+              Updating properties...
+            </span>
           </div>
         </div>
       )}
 
-      {/* -----------------------------------------
-          Filters
-      ------------------------------------------ */}
+      {/* Filter header */}
 
-      <div className="mb-8 flex flex-col gap-4">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <FilterBar
-            availability={availability}
-            setAvailability={
-              handleAvailabilityChange
-            }
-            sort={sort}
-            setSort={handleSortChange}
-            location={location}
-            setLocation={
-              handleLocationChange
-            }
-            category={category}
-            setCategory={
-              handleCategoryChange
-            }
-            price={price}
-            setPrice={
-              handlePriceChange
-            }
-            amenity={amenity}
-            setAmenity={
-              handleAmenityChange
-            }
-            availabilityOptions={
-              availabilityOptions
-            }
-            locationOptions={
-              locationOptions
-            }
-            categoryOptions={
-              categoryOptions
-            }
-            amenityOptions={
-              amenityOptions
-            }
-          />
+      <div className="mb-8 rounded-2xl border bg-card p-5 shadow-sm">
+        <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal className="h-5 w-5 text-primary" />
+
+            <div>
+              <h2 className="text-lg font-semibold">
+                Find Your Property
+              </h2>
+
+              <p className="text-sm text-muted-foreground">
+                Filter and sort properties to find the right place.
+              </p>
+            </div>
+          </div>
 
           {hasActiveFilters && (
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              size="sm"
               onClick={clearFilters}
-              disabled={isPending}
-              className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-fit"
             >
-              {isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <RotateCcw className="h-4 w-4" />
-              )}
-
-              Clear filters
-            </button>
+              <RotateCcw className="mr-2 h-4 w-4" />
+              Clear Filters
+            </Button>
           )}
+        </div>
+
+        {/* Filters */}
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {/* Availability */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Availability
+            </label>
+
+            <Select
+              value={availability || "all"}
+              onValueChange={(value) =>
+                handleAvailabilityChange(
+                  value === "all" ? "" : value,
+                )
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="All availability" />
+              </SelectTrigger>
+
+              <SelectContent>
+                <SelectItem value="all">
+                  All Availability
+                </SelectItem>
+
+                {availabilityOptions.map((value) => (
+                  <SelectItem
+                    key={value}
+                    value={value}
+                  >
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Category */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Category
+            </label>
+
+            <Select
+              value={categoryId || "all"}
+              onValueChange={(value) =>
+                handleCategoryChange(
+                  value === "all" ? "" : value,
+                )
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="All categories" />
+              </SelectTrigger>
+
+              <SelectContent>
+                <SelectItem value="all">
+                  All Categories
+                </SelectItem>
+
+                {categoryOptions.map((category) => (
+                  <SelectItem
+                    key={category.id}
+                    value={category.id}
+                  >
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Location */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Location
+            </label>
+
+            <Select
+              value={location || "all"}
+              onValueChange={(value) =>
+                handleLocationChange(
+                  value === "all" ? "" : value,
+                )
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="All locations" />
+              </SelectTrigger>
+
+              <SelectContent>
+                <SelectItem value="all">
+                  All Locations
+                </SelectItem>
+
+                {locationOptions.map((value) => (
+                  <SelectItem
+                    key={value}
+                    value={value}
+                  >
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Amenity */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Amenity
+            </label>
+
+            <Select
+              value={amenity || "all"}
+              onValueChange={(value) =>
+                handleAmenityChange(
+                  value === "all" ? "" : value,
+                )
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="All amenities" />
+              </SelectTrigger>
+
+              <SelectContent>
+                <SelectItem value="all">
+                  All Amenities
+                </SelectItem>
+
+                {amenityOptions.map((value) => (
+                  <SelectItem
+                    key={value}
+                    value={value}
+                  >
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Price + Sort */}
+
+        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {/* Min price */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Minimum Rent
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              value={minRent}
+              onChange={handleMinRentChange}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  applyPriceFilter();
+                }
+              }}
+              placeholder="e.g. 10000"
+              className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
+            />
+          </div>
+
+          {/* Max price */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Maximum Rent
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              value={maxRent}
+              onChange={handleMaxRentChange}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  applyPriceFilter();
+                }
+              }}
+              placeholder="e.g. 100000"
+              className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
+            />
+          </div>
+
+          {/* Apply price */}
+
+          <div className="flex items-end">
+            <Button
+              onClick={applyPriceFilter}
+              className="h-10 w-full"
+            >
+              <Search className="mr-2 h-4 w-4" />
+              Apply Price
+            </Button>
+          </div>
+
+          {/* Sort */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Sort By
+            </label>
+
+            <Select
+              value={sort}
+              onValueChange={handleSortChange}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+
+              <SelectContent>
+                <SelectItem value="latest">
+                  <span className="flex items-center gap-2">
+                    <ArrowDownAZ className="h-4 w-4" />
+                    Latest
+                  </span>
+                </SelectItem>
+
+                <SelectItem value="low">
+                  <span className="flex items-center gap-2">
+                    <ArrowUpAZ className="h-4 w-4" />
+                    Price: Low to High
+                  </span>
+                </SelectItem>
+
+                <SelectItem value="high">
+                  <span className="flex items-center gap-2">
+                    <ArrowDownAZ className="h-4 w-4" />
+                    Price: High to Low
+                  </span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
-      {/* -----------------------------------------
-          Result summary
-      ------------------------------------------ */}
+      {/* Results header */}
 
-      <div className="mb-6 flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
-          {meta.total === 0
-            ? "No properties found"
-            : `${meta.total} ${
-                meta.total === 1
-                  ? "property"
-                  : "properties"
-              } found`}
-        </p>
-
-        {meta.total > 0 && (
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
           <p className="text-sm text-muted-foreground">
-            Page{" "}
-            <span className="font-medium text-foreground">
-              {currentPage}
+            Showing{" "}
+            <span className="font-semibold text-foreground">
+              {resultStart}
+            </span>{" "}
+            –{" "}
+            <span className="font-semibold text-foreground">
+              {resultEnd}
             </span>{" "}
             of{" "}
-            <span className="font-medium text-foreground">
-              {totalPages}
-            </span>
+            <span className="font-semibold text-foreground">
+              {meta.total}
+            </span>{" "}
+            properties
           </p>
-        )}
+
+          {hasActiveFilters && (
+            <p className="mt-1 text-xs text-muted-foreground">
+              Filtered results
+            </p>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Filter className="h-4 w-4" />
+
+          <span>
+            Page {meta.page} of {totalPages}
+          </span>
+        </div>
       </div>
 
-      {/* -----------------------------------------
-          Property results
-      ------------------------------------------ */}
+      {/* Empty state */}
 
       {properties.length === 0 ? (
-        <EmptyState />
+        <div className="flex min-h-[350px] flex-col items-center justify-center rounded-2xl border border-dashed bg-card px-6 text-center">
+          <div className="mb-4 rounded-full bg-muted p-4">
+            <Search className="h-7 w-7 text-muted-foreground" />
+          </div>
+
+          <h3 className="text-xl font-semibold">
+            No properties found
+          </h3>
+
+          <p className="mt-2 max-w-md text-sm text-muted-foreground">
+            We couldn&apos;t find any properties matching your
+            current filters. Try changing or clearing some
+            filters.
+          </p>
+
+          {hasActiveFilters && (
+            <Button
+              variant="outline"
+              onClick={clearFilters}
+              className="mt-5"
+            >
+              <RotateCcw className="mr-2 h-4 w-4" />
+              Clear Filters
+            </Button>
+          )}
+        </div>
       ) : (
         <>
-          <PropertyGrid
-            properties={properties}
-          />
+          {/* Property grid */}
 
-          {/* ---------------------------------------
-              Pagination
-          ---------------------------------------- */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {properties.map((property) => (
+              <PropertyCard
+                key={property.id}
+                property={property}
+              />
+            ))}
+          </div>
+
+          {/* Pagination */}
 
           {totalPages > 1 && (
-            <div className="mt-12 flex flex-col items-center gap-4">
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {/* Previous */}
+            <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-6 sm:flex-row">
+              {/* Previous */}
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    goToPage(
-                      currentPage - 1,
-                    )
-                  }
-                  disabled={
-                    currentPage === 1 ||
-                    isPending
-                  }
-                  className="cursor-pointer rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {isPending &&
-                  loadingPage ===
-                    currentPage - 1 ? (
-                    <Loader2 className="mx-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    "Previous"
-                  )}
-                </button>
+              <Button
+                variant="outline"
+                disabled={currentPage <= 1}
+                onClick={() =>
+                  goToPage(currentPage - 1)
+                }
+              >
+                <ChevronLeft className="mr-1 h-4 w-4" />
+                Previous
+              </Button>
 
-                {/* Page numbers */}
+              {/* Page numbers */}
 
-                {paginationItems.map(
-                  (
-                    item,
-                    index,
-                  ) => {
-                    if (
-                      item ===
-                      "ellipsis"
-                    ) {
-                      return (
-                        <span
-                          key={`ellipsis-${index}`}
-                          className="px-2 text-muted-foreground"
-                        >
-                          …
-                        </span>
-                      );
-                    }
-
-                    const isCurrent =
-                      currentPage ===
-                      item;
-
-                    const isLoading =
-                      isPending &&
-                      loadingPage ===
-                        item;
-
+              <div className="flex items-center gap-1">
+                {pageNumbers.map((page, index) => {
+                  if (page === "...") {
                     return (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() =>
-                          goToPage(
-                            item,
-                          )
-                        }
-                        disabled={
-                          isCurrent ||
-                          isPending
-                        }
-                        aria-current={
-                          isCurrent
-                            ? "page"
-                            : undefined
-                        }
-                        className={`flex h-10 min-w-10 cursor-pointer items-center justify-center rounded-md border px-3 text-sm font-medium transition-all disabled:cursor-not-allowed ${
-                          isCurrent
-                            ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                            : "hover:bg-muted"
-                        }`}
+                      <span
+                        key={`ellipsis-${index}`}
+                        className="px-2 text-sm text-muted-foreground"
                       >
-                        {isLoading ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          item
-                        )}
-                      </button>
+                        ...
+                      </span>
                     );
-                  },
-                )}
-
-                {/* Next */}
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    goToPage(
-                      currentPage + 1,
-                    )
                   }
-                  disabled={
-                    currentPage ===
-                      totalPages ||
-                    isPending
-                  }
-                  className="cursor-pointer rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {isPending &&
-                  loadingPage ===
-                    currentPage + 1 ? (
-                    <Loader2 className="mx-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    "Next"
-                  )}
-                </button>
+
+                  const isActive =
+                    page === currentPage;
+
+                  return (
+                    <Button
+                      key={page}
+                      variant={
+                        isActive
+                          ? "default"
+                          : "outline"
+                      }
+                      size="sm"
+                      className="h-9 w-9 p-0"
+                      onClick={() =>
+                        goToPage(page)
+                      }
+                    >
+                      {page}
+                    </Button>
+                  );
+                })}
               </div>
 
-              {/* Pagination summary */}
+              {/* Next */}
 
-              <p className="text-center text-sm text-muted-foreground">
-                Showing page{" "}
-                <span className="font-medium text-foreground">
-                  {currentPage}
-                </span>{" "}
-                of{" "}
-                <span className="font-medium text-foreground">
-                  {totalPages}
-                </span>{" "}
-                •{" "}
-                <span className="font-medium text-foreground">
-                  {meta.total}
-                </span>{" "}
-                properties
-              </p>
+              <Button
+                variant="outline"
+                disabled={currentPage >= totalPages}
+                onClick={() =>
+                  goToPage(currentPage + 1)
+                }
+              >
+                Next
+                <ChevronRight className="ml-1 h-4 w-4" />
+              </Button>
             </div>
           )}
         </>
       )}
-    </div>
+    </section>
   );
 }

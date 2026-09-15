@@ -49,18 +49,25 @@
 // }
 
 import { getProperties } from "@/app/service/propertyService";
-import PropertiesClient from "./_components/PropertiesClient";
 import SearchBar from "./_components/SearchBar";
+import PropertiesClient from "./_components/PropertiesClient";
 
 type SearchParams = {
   search?: string;
-  category?: string;
+
+  categoryId?: string;
+
   availability?: string;
+
   minRent?: string;
   maxRent?: string;
+
   location?: string;
   amenity?: string;
-  sort?: string;
+
+  sortBy?: string;
+  sortOrder?: string;
+
   page?: string;
 };
 
@@ -71,16 +78,16 @@ export default async function PropertiesPage({
 }) {
   const params = await searchParams;
 
-  const pageNumber = Number(params.page ?? 1);
-
-  const page = pageNumber > 0 ? pageNumber : 1;
+  const page = Number(params.page ?? 1);
 
   const { properties, meta } = await getProperties({
-    page,
+    page: page > 0 ? page : 1,
     limit: 30,
 
     search: params.search,
-    category: params.category,
+
+    categoryId: params.categoryId,
+
     availability: params.availability,
 
     minRent: params.minRent,
@@ -88,7 +95,9 @@ export default async function PropertiesPage({
 
     location: params.location,
     amenity: params.amenity,
-    sort: params.sort,
+
+    sortBy: params.sortBy ?? "createdAt",
+    sortOrder: params.sortOrder ?? "desc",
   });
 
   return (
@@ -106,4 +115,3 @@ export default async function PropertiesPage({
     </main>
   );
 }
-

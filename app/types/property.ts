@@ -37,16 +37,16 @@ export interface IProperty {
   updatedAt: string;
 }
 
-interface IPropertyResponse {
-  meta: {
-    page: number;
-    limit: number;
-    total: number;
-  };
-  data: IProperty[];
-}
+// interface IPropertyResponse {
+//   meta: {
+//     page: number;
+//     limit: number;
+//     total: number;
+//   };
+//   data: IProperty[];
+// }
 
-// Landlord Dashboard Property 
+// Landlord Dashboard Property
 
 export type Availability = "AVAILABLE" | "RENTED";
 

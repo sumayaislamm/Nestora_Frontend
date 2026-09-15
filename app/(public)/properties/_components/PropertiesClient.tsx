@@ -929,28 +929,40 @@ export default function PropertiesClient({ properties, meta }: Props) {
     return categories;
   }, [properties]);
 
+  // const locationOptions = useMemo(() => {
+  //   const locations = Array.from(
+  //     new Set(
+  //       properties
+  //         .map((property) => {
+  //           if (!property.location) return "";
+
+  //           const parts = property.location
+  //             .split(",")
+  //             .map((part) => part.trim())
+  //             .filter(Boolean);
+
+  //           return parts.length > 0
+  //             ? parts[parts.length - 1]
+  //             : property.location;
+  //         })
+  //         .filter(Boolean),
+  //     ),
+  //   );
+
+  //   return locations.sort((a, b) => a.localeCompare(b));
+  // }, [properties]);
+
   const locationOptions = useMemo(() => {
-    const locations = Array.from(
-      new Set(
-        properties
-          .map((property) => {
-            if (!property.location) return "";
+  const locations = Array.from(
+    new Set(
+      properties
+        .map((property) => property.location?.trim())
+        .filter(Boolean),
+    ),
+  );
 
-            const parts = property.location
-              .split(",")
-              .map((part) => part.trim())
-              .filter(Boolean);
-
-            return parts.length > 0
-              ? parts[parts.length - 1]
-              : property.location;
-          })
-          .filter(Boolean),
-      ),
-    );
-
-    return locations.sort((a, b) => a.localeCompare(b));
-  }, [properties]);
+  return locations.sort((a, b) => a.localeCompare(b));
+}, [properties]);
 
   const amenityOptions = useMemo(() => {
     const amenities = Array.from(

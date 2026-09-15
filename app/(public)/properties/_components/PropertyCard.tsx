@@ -39,7 +39,15 @@ export default function PropertyCard({ property }: Props) {
     landlord,
   } = property;
 
-  const imageUrl = images?.[0];
+  const imageUrl =
+    images?.find(
+      (img) =>
+        typeof img === "string" &&
+        img.trim() !== "" &&
+        img !== "NULL" &&
+        img.startsWith("http"),
+    ) ?? "";
+
   const hasImage = Boolean(imageUrl) && !imageError;
 
   const visibleAmenities = amenities.slice(0, 3);
@@ -144,9 +152,7 @@ export default function PropertyCard({ property }: Props) {
             >
               <Heart
                 className={`h-5 w-5 transition-all duration-200 ${
-                  isFavorite
-                    ? "fill-current text-red-500"
-                    : "text-foreground"
+                  isFavorite ? "fill-current text-red-500" : "text-foreground"
                 }`}
               />
             </motion.div>
@@ -158,7 +164,9 @@ export default function PropertyCard({ property }: Props) {
           <div className="min-w-0 text-white">
             <div className="mb-1 flex items-center gap-1.5 text-sm font-medium text-white/90">
               <MapPin className="h-4 w-4 shrink-0" />
-              <span className="truncate">{location || "Location unavailable"}</span>
+              <span className="truncate">
+                {location || "Location unavailable"}
+              </span>
             </div>
           </div>
 
@@ -181,10 +189,7 @@ export default function PropertyCard({ property }: Props) {
       <div className="flex flex-1 flex-col p-5">
         {/* Title */}
         <div className="mb-4">
-          <Link
-            href={`/properties/${id}`}
-            className="block focus:outline-none"
-          >
+          <Link href={`/properties/${id}`} className="block focus:outline-none">
             <h2 className="line-clamp-2 min-h-[3.5rem] text-lg font-bold leading-7 tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary">
               {title}
             </h2>
@@ -251,7 +256,9 @@ export default function PropertyCard({ property }: Props) {
           <div className="flex items-center justify-between gap-3">
             {/* Landlord */}
             <div className="flex min-w-0 items-center gap-3">
-              {landlord?.profileImage ? (
+              {landlord?.profileImage &&
+              landlord.profileImage !== "NULL" &&
+              landlord.profileImage.startsWith("http") ? (
                 <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full border border-border">
                   <Image
                     src={landlord.profileImage}
@@ -281,9 +288,7 @@ export default function PropertyCard({ property }: Props) {
                   )}
                 </div>
 
-                <p className="text-xs text-muted-foreground">
-                  Property owner
-                </p>
+                <p className="text-xs text-muted-foreground">Property owner</p>
               </div>
             </div>
 

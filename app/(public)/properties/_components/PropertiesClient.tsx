@@ -806,10 +806,9 @@
 //   );
 // }
 
-
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowDownAZ,
@@ -840,10 +839,7 @@ type Props = {
   meta: PropertyMeta;
 };
 
-export default function PropertiesClient({
-  properties,
-  meta,
-}: Props) {
+export default function PropertiesClient({ properties, meta }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -860,20 +856,13 @@ export default function PropertiesClient({
   const sortByFromUrl = searchParams.get("sortBy") ?? "createdAt";
   const sortOrderFromUrl = searchParams.get("sortOrder") ?? "desc";
 
-  const currentPage = Math.max(
-    1,
-    Number(searchParams.get("page") ?? 1),
-  );
+  const currentPage = Math.max(1, Number(searchParams.get("page") ?? 1));
 
   /* ----------------------------- Local state ----------------------------- */
 
-  const [availability, setAvailability] = useState(
-    availabilityFromUrl,
-  );
+  const [availability, setAvailability] = useState(availabilityFromUrl);
 
-  const [categoryId, setCategoryId] = useState(
-    categoryIdFromUrl,
-  );
+  const [categoryId, setCategoryId] = useState(categoryIdFromUrl);
 
   const [minRent, setMinRent] = useState(minRentFromUrl);
   const [maxRent, setMaxRent] = useState(maxRentFromUrl);
@@ -882,32 +871,22 @@ export default function PropertiesClient({
   const [amenity, setAmenity] = useState(amenityFromUrl);
 
   const [sort, setSort] = useState(() => {
-    if (
-      sortByFromUrl === "rent" &&
-      sortOrderFromUrl === "asc"
-    ) {
+    if (sortByFromUrl === "rent" && sortOrderFromUrl === "asc") {
       return "low";
     }
 
-    if (
-      sortByFromUrl === "rent" &&
-      sortOrderFromUrl === "desc"
-    ) {
+    if (sortByFromUrl === "rent" && sortOrderFromUrl === "desc") {
       return "high";
     }
 
     return "latest";
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   /* --------------------------- Update URL helper -------------------------- */
 
-  const updateQuery = (
-    key: string,
-    value: string,
-    resetPage = true,
-  ) => {
+  const updateQuery = (key: string, value: string, resetPage = true) => {
     const params = new URLSearchParams(searchParams.toString());
 
     if (value) {
@@ -920,9 +899,9 @@ export default function PropertiesClient({
       params.set("page", "1");
     }
 
-    setIsLoading(true);
-
-    router.push(`${pathname}?${params.toString()}`);
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`);
+    });
   };
 
   /* --------------------------- Filter options ---------------------------- */
@@ -930,9 +909,7 @@ export default function PropertiesClient({
   const availabilityOptions = useMemo(() => {
     const values = Array.from(
       new Set(
-        properties
-          .map((property) => property.availability)
-          .filter(Boolean),
+        properties.map((property) => property.availability).filter(Boolean),
       ),
     );
 
@@ -940,21 +917,12 @@ export default function PropertiesClient({
   }, [properties]);
 
   const categoryOptions = useMemo(() => {
-    /**
-     * IMPORTANT:
-     * categoryId must be sent to backend.
-     *
-     * Do NOT use category.name as the value.
-     * The backend expects the category UUID.
-     */
+ 
     const categories = Array.from(
       new Map(
         properties
           .filter((property) => property.category)
-          .map((property) => [
-            property.category!.id,
-            property.category!,
-          ]),
+          .map((property) => [property.category!.id, property.category!]),
       ).values(),
     ).sort((a, b) => a.name.localeCompare(b.name));
 
@@ -1018,17 +986,13 @@ export default function PropertiesClient({
     updateQuery("amenity", value);
   };
 
-  const handleMinRentChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleMinRentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
 
     setMinRent(value);
   };
 
-  const handleMaxRentChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleMaxRentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
 
     setMaxRent(value);
@@ -1051,9 +1015,9 @@ export default function PropertiesClient({
 
     params.set("page", "1");
 
-    setIsLoading(true);
-
-    router.push(`${pathname}?${params.toString()}`);
+ startTransition(() => {
+  router.push(`${pathname}?${params.toString()}`);
+});
   };
 
   /* ------------------------------- Sort --------------------------------- */
@@ -1076,9 +1040,9 @@ export default function PropertiesClient({
 
     params.set("page", "1");
 
-    setIsLoading(true);
-
-    router.push(`${pathname}?${params.toString()}`);
+    startTransition(() => {
+  router.push(`${pathname}?${params.toString()}`);
+});
   };
 
   /* ---------------------------- Clear filters ----------------------------- */
@@ -1101,24 +1065,17 @@ export default function PropertiesClient({
     setAmenity("");
     setSort("latest");
 
-    setIsLoading(true);
-
-    router.push(pathname);
+    startTransition(() => {
+      router.push(pathname);
+    });
   };
 
   /* ----------------------------- Pagination ------------------------------ */
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(meta.total / meta.limit),
-  );
+  const totalPages = Math.max(1, Math.ceil(meta.total / meta.limit));
 
   const goToPage = (page: number) => {
-    if (
-      page < 1 ||
-      page > totalPages ||
-      page === currentPage
-    ) {
+    if (page < 1 || page > totalPages || page === currentPage) {
       return;
     }
 
@@ -1126,9 +1083,9 @@ export default function PropertiesClient({
 
     params.set("page", String(page));
 
-    setIsLoading(true);
-
-    router.push(`${pathname}?${params.toString()}`);
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`);
+    });
   };
 
   const pageNumbers = useMemo(() => {
@@ -1149,10 +1106,7 @@ export default function PropertiesClient({
     }
 
     const start = Math.max(2, currentPage - 1);
-    const end = Math.min(
-      totalPages - 1,
-      currentPage + 1,
-    );
+    const end = Math.min(totalPages - 1, currentPage + 1);
 
     for (let page = start; page <= end; page++) {
       pages.push(page);
@@ -1169,15 +1123,10 @@ export default function PropertiesClient({
 
   /* ----------------------------- Result range ----------------------------- */
 
-  const resultStart =
-    meta.total === 0
-      ? 0
-      : (meta.page - 1) * meta.limit + 1;
+  const resultStart = meta.total === 0 ? 0 : (meta.page - 1) * meta.limit + 1;
 
   const resultEnd =
-    meta.total === 0
-      ? 0
-      : Math.min(meta.page * meta.limit, meta.total);
+    meta.total === 0 ? 0 : Math.min(meta.page * meta.limit, meta.total);
 
   /* -------------------------------- JSX --------------------------------- */
 
@@ -1185,14 +1134,12 @@ export default function PropertiesClient({
     <section className="relative">
       {/* Loading overlay */}
 
-      {isLoading && (
+      {isPending && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm">
           <div className="flex items-center gap-3 rounded-xl border bg-background px-5 py-4 shadow-lg">
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
 
-            <span className="text-sm font-medium">
-              Updating properties...
-            </span>
+            <span className="text-sm font-medium">Updating properties...</span>
           </div>
         </div>
       )}
@@ -1205,9 +1152,7 @@ export default function PropertiesClient({
             <SlidersHorizontal className="h-5 w-5 text-primary" />
 
             <div>
-              <h2 className="text-lg font-semibold">
-                Find Your Property
-              </h2>
+              <h2 className="text-lg font-semibold">Find Your Property</h2>
 
               <p className="text-sm text-muted-foreground">
                 Filter and sort properties to find the right place.
@@ -1241,9 +1186,7 @@ export default function PropertiesClient({
             <Select
               value={availability || "all"}
               onValueChange={(value) =>
-                handleAvailabilityChange(
-                  value === "all" ? "" : value,
-                )
+                handleAvailabilityChange(value === "all" ? "" : value)
               }
             >
               <SelectTrigger className="w-full">
@@ -1251,15 +1194,10 @@ export default function PropertiesClient({
               </SelectTrigger>
 
               <SelectContent>
-                <SelectItem value="all">
-                  All Availability
-                </SelectItem>
+                <SelectItem value="all">All Availability</SelectItem>
 
                 {availabilityOptions.map((value) => (
-                  <SelectItem
-                    key={value}
-                    value={value}
-                  >
+                  <SelectItem key={value} value={value}>
                     {value}
                   </SelectItem>
                 ))}
@@ -1270,16 +1208,12 @@ export default function PropertiesClient({
           {/* Category */}
 
           <div>
-            <label className="mb-2 block text-sm font-medium">
-              Category
-            </label>
+            <label className="mb-2 block text-sm font-medium">Category</label>
 
             <Select
               value={categoryId || "all"}
               onValueChange={(value) =>
-                handleCategoryChange(
-                  value === "all" ? "" : value,
-                )
+                handleCategoryChange(value === "all" ? "" : value)
               }
             >
               <SelectTrigger className="w-full">
@@ -1287,15 +1221,10 @@ export default function PropertiesClient({
               </SelectTrigger>
 
               <SelectContent>
-                <SelectItem value="all">
-                  All Categories
-                </SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
 
                 {categoryOptions.map((category) => (
-                  <SelectItem
-                    key={category.id}
-                    value={category.id}
-                  >
+                  <SelectItem key={category.id} value={category.id}>
                     {category.name}
                   </SelectItem>
                 ))}
@@ -1306,16 +1235,12 @@ export default function PropertiesClient({
           {/* Location */}
 
           <div>
-            <label className="mb-2 block text-sm font-medium">
-              Location
-            </label>
+            <label className="mb-2 block text-sm font-medium">Location</label>
 
             <Select
               value={location || "all"}
               onValueChange={(value) =>
-                handleLocationChange(
-                  value === "all" ? "" : value,
-                )
+                handleLocationChange(value === "all" ? "" : value)
               }
             >
               <SelectTrigger className="w-full">
@@ -1323,15 +1248,10 @@ export default function PropertiesClient({
               </SelectTrigger>
 
               <SelectContent>
-                <SelectItem value="all">
-                  All Locations
-                </SelectItem>
+                <SelectItem value="all">All Locations</SelectItem>
 
                 {locationOptions.map((value) => (
-                  <SelectItem
-                    key={value}
-                    value={value}
-                  >
+                  <SelectItem key={value} value={value}>
                     {value}
                   </SelectItem>
                 ))}
@@ -1342,16 +1262,12 @@ export default function PropertiesClient({
           {/* Amenity */}
 
           <div>
-            <label className="mb-2 block text-sm font-medium">
-              Amenity
-            </label>
+            <label className="mb-2 block text-sm font-medium">Amenity</label>
 
             <Select
               value={amenity || "all"}
               onValueChange={(value) =>
-                handleAmenityChange(
-                  value === "all" ? "" : value,
-                )
+                handleAmenityChange(value === "all" ? "" : value)
               }
             >
               <SelectTrigger className="w-full">
@@ -1359,15 +1275,10 @@ export default function PropertiesClient({
               </SelectTrigger>
 
               <SelectContent>
-                <SelectItem value="all">
-                  All Amenities
-                </SelectItem>
+                <SelectItem value="all">All Amenities</SelectItem>
 
                 {amenityOptions.map((value) => (
-                  <SelectItem
-                    key={value}
-                    value={value}
-                  >
+                  <SelectItem key={value} value={value}>
                     {value}
                   </SelectItem>
                 ))}
@@ -1426,10 +1337,7 @@ export default function PropertiesClient({
           {/* Apply price */}
 
           <div className="flex items-end">
-            <Button
-              onClick={applyPriceFilter}
-              className="h-10 w-full"
-            >
+            <Button onClick={applyPriceFilter} className="h-10 w-full">
               <Search className="mr-2 h-4 w-4" />
               Apply Price
             </Button>
@@ -1438,14 +1346,9 @@ export default function PropertiesClient({
           {/* Sort */}
 
           <div>
-            <label className="mb-2 block text-sm font-medium">
-              Sort By
-            </label>
+            <label className="mb-2 block text-sm font-medium">Sort By</label>
 
-            <Select
-              value={sort}
-              onValueChange={handleSortChange}
-            >
+            <Select value={sort} onValueChange={handleSortChange}>
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
@@ -1483,17 +1386,10 @@ export default function PropertiesClient({
         <div>
           <p className="text-sm text-muted-foreground">
             Showing{" "}
-            <span className="font-semibold text-foreground">
-              {resultStart}
-            </span>{" "}
-            –{" "}
-            <span className="font-semibold text-foreground">
-              {resultEnd}
-            </span>{" "}
+            <span className="font-semibold text-foreground">{resultStart}</span>{" "}
+            – <span className="font-semibold text-foreground">{resultEnd}</span>{" "}
             of{" "}
-            <span className="font-semibold text-foreground">
-              {meta.total}
-            </span>{" "}
+            <span className="font-semibold text-foreground">{meta.total}</span>{" "}
             properties
           </p>
 
@@ -1521,22 +1417,15 @@ export default function PropertiesClient({
             <Search className="h-7 w-7 text-muted-foreground" />
           </div>
 
-          <h3 className="text-xl font-semibold">
-            No properties found
-          </h3>
+          <h3 className="text-xl font-semibold">No properties found</h3>
 
           <p className="mt-2 max-w-md text-sm text-muted-foreground">
-            We couldn&apos;t find any properties matching your
-            current filters. Try changing or clearing some
-            filters.
+            We couldn&apos;t find any properties matching your current filters.
+            Try changing or clearing some filters.
           </p>
 
           {hasActiveFilters && (
-            <Button
-              variant="outline"
-              onClick={clearFilters}
-              className="mt-5"
-            >
+            <Button variant="outline" onClick={clearFilters} className="mt-5">
               <RotateCcw className="mr-2 h-4 w-4" />
               Clear Filters
             </Button>
@@ -1548,10 +1437,7 @@ export default function PropertiesClient({
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {properties.map((property) => (
-              <PropertyCard
-                key={property.id}
-                property={property}
-              />
+              <PropertyCard key={property.id} property={property} />
             ))}
           </div>
 
@@ -1564,9 +1450,7 @@ export default function PropertiesClient({
               <Button
                 variant="outline"
                 disabled={currentPage <= 1}
-                onClick={() =>
-                  goToPage(currentPage - 1)
-                }
+                onClick={() => goToPage(currentPage - 1)}
               >
                 <ChevronLeft className="mr-1 h-4 w-4" />
                 Previous
@@ -1587,22 +1471,15 @@ export default function PropertiesClient({
                     );
                   }
 
-                  const isActive =
-                    page === currentPage;
+                  const isActive = page === currentPage;
 
                   return (
                     <Button
                       key={page}
-                      variant={
-                        isActive
-                          ? "default"
-                          : "outline"
-                      }
+                      variant={isActive ? "default" : "outline"}
                       size="sm"
                       className="h-9 w-9 p-0"
-                      onClick={() =>
-                        goToPage(page)
-                      }
+                      onClick={() => goToPage(page)}
                     >
                       {page}
                     </Button>
@@ -1615,9 +1492,7 @@ export default function PropertiesClient({
               <Button
                 variant="outline"
                 disabled={currentPage >= totalPages}
-                onClick={() =>
-                  goToPage(currentPage + 1)
-                }
+                onClick={() => goToPage(currentPage + 1)}
               >
                 Next
                 <ChevronRight className="ml-1 h-4 w-4" />

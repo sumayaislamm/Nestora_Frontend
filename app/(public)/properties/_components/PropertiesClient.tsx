@@ -256,14 +256,6 @@ export default function PropertiesClient({ properties, meta }: Props) {
   return (
     <>
       <div className="mb-8 flex flex-col gap-4">
-        <h1 className="mb-2 text-center text-3xl font-bold text-primary">
-          All Properties
-        </h1>
-
-        <p className="mb-8 text-center text-sm text-muted-foreground">
-          <span className="font-semibold text-foreground">{meta.total}</span>{" "}
-          properties available
-        </p>
         <FilterBar
           availability={availability}
           setAvailability={handleAvailabilityChange}

@@ -20,7 +20,7 @@ export function HeroSection() {
       >
         <source
           // src="https://res.cloudinary.com/yznthkkx/video/upload/v1787327957/16528749_3840_2160_24fps.mp4"
-          src="https://res.cloudinary.com/yznthkkx/video/upload/v1789620343/istockphoto-2153224929-640_adpp_is.mp4"
+          src="https://res.cloudinary.com/yznthkkx/video/upload/v1789620875/mixkit-house-keys-on-a-table-15064-hd-ready.mp4"
           type="video/mp4"
         />
       </video>

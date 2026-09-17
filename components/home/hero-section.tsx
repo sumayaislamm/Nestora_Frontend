@@ -16,7 +16,7 @@ export function HeroSection() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
       >
         <source
            src="https://res.cloudinary.com/yznthkkx/video/upload/v1789620875/mixkit-house-keys-on-a-table-15064-hd-ready.mp4"

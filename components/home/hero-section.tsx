@@ -19,7 +19,8 @@ export function HeroSection() {
         preload="metadata"
       >
         <source
-           src="https://res.cloudinary.com/yznthkkx/video/upload/v1789620875/mixkit-house-keys-on-a-table-15064-hd-ready.mp4"
+          //  src="https://res.cloudinary.com/yznthkkx/video/upload/v1789620875/mixkit-house-keys-on-a-table-15064-hd-ready.mp4"
+          src="https://res.cloudinary.com/yznthkkx/video/upload/f_auto,q_auto/v1789620875/mixkit-house-keys-on-a-table-15064-hd-ready.mp4"
           type="video/mp4"
         />
       </video>
@@ -128,7 +129,6 @@ function ListingCard({
     <div
       className={`rounded-xl border border-border bg-card p-3 shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:rotate-0 ${className}`}
     >
- 
       <div className="relative mb-3 h-24 overflow-hidden rounded-lg bg-[linear-gradient(135deg,color-mix(in_oklch,var(--primary),transparent_82%),color-mix(in_oklch,var(--primary),transparent_94%))]">
         {image ? (
           <Image

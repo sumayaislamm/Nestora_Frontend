@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-// import PreloadAssets from "@/components/home/PreloadAssets";
 import GlobalLoading from "@/components/GlobalLoading";
 
 const fraunces = Fraunces({
@@ -36,7 +35,6 @@ export default function RootLayout({
       className={`h-full ${fraunces.variable} ${jakarta.variable}`}
     >
       <body className="">
-           {/* <PreloadAssets /> */}
            <GlobalLoading />
         <Toaster position="top-right" richColors></Toaster>
         {children}

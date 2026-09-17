@@ -77,7 +77,7 @@ export function HeroSection() {
             beds={1}
             baths={1}
             area={480}
-            image="https://res.cloudinary.com/yznthkkx/image/upload/v1787328510/pexels-brayan-ramirez-1648892253-34478703.jpg"
+            image="https://res.cloudinary.com/yznthkkx/image/upload/v1789639748/pexels-artbovich-7166945.jpg"
           />
           <ListingCard
             className="card-from-top absolute right-0 top-0 w-64 rotate-3"
@@ -87,7 +87,7 @@ export function HeroSection() {
             beds={3}
             baths={2}
             area={1150}
-            image="https://res.cloudinary.com/yznthkkx/image/upload/v1787328508/pexels-egorkomarov-12061813.jpg"
+            image="https://res.cloudinary.com/yznthkkx/image/upload/v1789639281/studio-archifiction-lla3HZ5Sgm8-unsplash.jpg"
           />
           <ListingCard
             className="card-from-right absolute bottom-2 left-14 w-64 rotate-1"
@@ -97,7 +97,7 @@ export function HeroSection() {
             beds={4}
             baths={3}
             area={2100}
-            image="https://res.cloudinary.com/yznthkkx/image/upload/v1787328507/pexels-valeria-drozdova-2148646707-38934658.jpg"
+            image="https://res.cloudinary.com/yznthkkx/image/upload/v1789639538/pexels-natalia-falsetti-431212036-15251055.jpg"
           />
         </div>
       </div>

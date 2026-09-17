@@ -54,7 +54,7 @@ export function HeroSection() {
           </p>
 
           {/* Stats */}
-          <dl className="card-flip-up mt-10 flex w-92 flex-wrap gap-x-10 rounded-lg bg-gradient-to-br from-white via-blue-50 to-blue-500 p-5 shadow-sm">
+          <dl className="card-flip-up mt-10 flex w-92 flex-wrap gap-x-10 rounded-lg bg-linear-to-br from-white via-blue-50 to-blue-500 p-5 shadow-sm">
             {STATS.map((stat) => (
               <div key={stat.label}>
                 <dt className="font-heading text-2xl font-medium text-base-foreground">

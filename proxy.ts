@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 import { jwtUtils } from "./app/utils/jwt";
 
 const AUTH_ROUTES = ["/login", "/register"];
-const PUBLIC_ROUTES = ["/", "/properties", "/login", "/register", "/about", "/services", "/contact", "/videos/16528749_3840_2160_24fps.mp4"];
+const PUBLIC_ROUTES = ["/", "/properties", "/login", "/register", "/about", "/services", "/contact"];
 
 export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;

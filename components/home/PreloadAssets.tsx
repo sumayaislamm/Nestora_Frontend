@@ -10,7 +10,7 @@ const ASSETS = {
   ],
 
   video:
-    "https://res.cloudinary.com/yznthkkx/video/upload/v1787327957/16528749_3840_2160_24fps.mp4",
+    "https://res.cloudinary.com/yznthkkx/video/upload/v1789620875/mixkit-house-keys-on-a-table-15064-hd-ready.mp4",
 };
 
 export default function PreloadAssets() {

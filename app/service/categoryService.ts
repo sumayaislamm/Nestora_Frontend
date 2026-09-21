@@ -15,6 +15,5 @@ export const getCategories = async (): Promise<ICategory[]> => {
 
   const result = await res.json();
 
-  return result.data;
+  return result.data.categories;
 };
-

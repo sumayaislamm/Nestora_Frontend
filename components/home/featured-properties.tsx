@@ -177,7 +177,7 @@ export function FeaturedProperties() {
                     />
 
                     {/* Image Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/5 to-transparent" />
 
                     {/* Property Badge */}
                     <Badge className="absolute left-4 top-4 rounded-full border-0 bg-white/90 px-3 py-1 text-xs font-semibold text-foreground shadow-md backdrop-blur">

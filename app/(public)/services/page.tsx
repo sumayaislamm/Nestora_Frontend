@@ -72,8 +72,7 @@ const landlordServices = [
   {
     icon: Check,
     title: "Manage requests",
-    description:
-      "Review incoming tenant requests and approve or reject them.",
+    description: "Review incoming tenant requests and approve or reject them.",
   },
 ];
 
@@ -146,26 +145,27 @@ export default function ServicesPage() {
   return (
     <main className="overflow-hidden bg-background text-foreground">
       {/* =====================================================
-          HERO
-      ====================================================== */}
-      <section className="relative min-h-[85vh] flex items-center border-b border-border">
+    HERO
+====================================================== */}
+      <section className="relative overflow-hidden border-b border-border">
         {/* Background glow */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
+          initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          className="pointer-events-none absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full bg-primary/10 blur-3xl"
+          className="pointer-events-none absolute -right-40 -top-40 h-150 w-150 rounded-full bg-primary/10 blur-3xl"
         />
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
+          initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.4, delay: 0.15, ease: "easeOut" }}
-          className="pointer-events-none absolute -bottom-40 -left-40 h-[450px] w-[450px] rounded-full bg-primary/5 blur-3xl"
+          className="pointer-events-none absolute -bottom-40 -left-40 h-112.5 w-112.5 rounded-full bg-primary/5 blur-3xl"
         />
 
-        <div className="mx-auto w-full max-w-7xl px-6 py-4 lg:px-8">
-          <div className="max-w-5xl">
+        <div className="mx-auto grid min-h-[85vh] max-w-7xl items-center gap-16 px-6 py-4 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
+          {/* LEFT */}
+          <div className="relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
@@ -173,6 +173,7 @@ export default function ServicesPage() {
               className="mb-6 flex items-center gap-3"
             >
               <span className="h-px w-10 bg-primary" />
+
               <span className="text-sm font-medium uppercase tracking-[0.25em] text-muted-foreground">
                 Nestora Services
               </span>
@@ -181,8 +182,12 @@ export default function ServicesPage() {
             <motion.h1
               initial={{ opacity: 0, y: 45, filter: "blur(8px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ duration: 0.9, delay: 0.1, ease: "easeOut" }}
-              className="max-w-4xl text-5xl font-semibold tracking-tight sm:text-6xl lg:text-8xl"
+              transition={{
+                duration: 0.9,
+                delay: 0.1,
+                ease: "easeOut",
+              }}
+              className="max-w-3xl text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl"
             >
               More than a
               <span className="block text-muted-foreground">
@@ -194,11 +199,11 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="mt-8 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg"
+              className="mt-8 max-w-xl text-base leading-8 text-muted-foreground sm:text-lg"
             >
-              Nestora brings property discovery, landlord communication,
-              rental requests, payments, and management together in one
-              straightforward rental experience.
+              Nestora brings property discovery, landlord communication, rental
+              requests, payments, and management together in one straightforward
+              rental experience.
             </motion.p>
 
             <motion.div
@@ -222,26 +227,208 @@ export default function ServicesPage() {
                 Talk to us
               </Link>
             </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="mt-16 flex items-center gap-4 text-sm text-muted-foreground"
+            >
+              <motion.div
+                animate={{ y: [0, 7, 0] }}
+                transition={{
+                  duration: 1.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <ArrowDown className="h-4 w-4" />
+              </motion.div>
+              Everything in one rental experience
+            </motion.div>
           </div>
 
+          {/* RIGHT — SERVICE VISUAL */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="mt-20 flex items-center gap-4 text-sm text-muted-foreground"
+            initial={{ opacity: 0, x: 70, scale: 0.92 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{
+              duration: 1,
+              delay: 0.25,
+              ease: "easeOut",
+            }}
+            className="relative mx-auto w-full max-w-[520px]"
           >
+            {/* Architectural grid */}
+            <div className="pointer-events-none absolute inset-0 -z-10 opacity-30">
+              <div
+                className="h-full w-full"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
+                  backgroundSize: "42px 42px",
+                }}
+              />
+            </div>
+
+            {/* Main visual */}
             <motion.div
-              animate={{ y: [0, 7, 0] }}
+              animate={{ y: [0, -8, 0] }}
               transition={{
-                duration: 1.8,
+                duration: 5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
+              className="relative rounded-[2rem] border border-border bg-background/80 p-4 shadow-2xl backdrop-blur-xl"
             >
-              <ArrowDown className="h-4 w-4" />
+              {/* Top bar */}
+              <div className="flex items-center justify-between border-b border-border px-3 pb-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                    Nestora
+                  </p>
+
+                  <p className="mt-1 text-sm font-medium">Rental experience</p>
+                </div>
+
+                <motion.div
+                  animate={{ scale: [1, 1.08, 1] }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs"
+                >
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  Live
+                </motion.div>
+              </div>
+
+              {/* Property visual */}
+              <div className="relative mt-4 h-[250px] overflow-hidden rounded-2xl bg-muted">
+                <div className="absolute inset-0 bg-gradient-to-br from-muted-foreground/10 via-background/30 to-primary/10" />
+
+                {/* Building */}
+                <div className="absolute bottom-0 left-1/2 w-[72%] -translate-x-1/2">
+                  <div className="relative h-[190px] rounded-t-[3rem] border border-border bg-background shadow-xl">
+                    {/* Windows */}
+                    <div className="absolute inset-x-8 top-8 grid grid-cols-3 gap-4">
+                      {Array.from({ length: 9 }).map((_, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{
+                            delay: 0.8 + index * 0.06,
+                            duration: 0.4,
+                            ease: "easeOut",
+                          }}
+                          className="h-9 rounded-md border border-border bg-muted"
+                        />
+                      ))}
+                    </div>
+
+                    {/* Entrance */}
+                    <div className="absolute bottom-0 left-1/2 h-20 w-16 -translate-x-1/2 rounded-t-2xl border border-border bg-muted" />
+                  </div>
+                </div>
+
+                {/* Verified badge */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 1,
+                    duration: 0.5,
+                    ease: "easeOut",
+                  }}
+                  className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-border bg-background/90 px-3 py-2 text-xs font-medium shadow-lg backdrop-blur"
+                >
+                  <ShieldCheck className="h-4 w-4" />
+                  Verified listing
+                </motion.div>
+              </div>
+
+              {/* Bottom info */}
+              <div className="grid grid-cols-2 gap-3 pt-4">
+                <motion.div
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.25 }}
+                  className="rounded-2xl border border-border p-4 transition-shadow duration-300 hover:shadow-lg"
+                >
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Search className="h-4 w-4" />
+                    <span className="text-xs">Discovery</span>
+                  </div>
+
+                  <p className="mt-2 text-sm font-medium">Smart search</p>
+                </motion.div>
+
+                <motion.div
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.25 }}
+                  className="rounded-2xl border border-border p-4 transition-shadow duration-300 hover:shadow-lg"
+                >
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <WalletCards className="h-4 w-4" />
+                    <span className="text-xs">Payments</span>
+                  </div>
+
+                  <p className="mt-2 text-sm font-medium">Secure process</p>
+                </motion.div>
+              </div>
             </motion.div>
 
-            Everything in one rental experience
+            {/* Floating connection card */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                delay: 1.1,
+                duration: 0.6,
+                ease: "easeOut",
+              }}
+              whileHover={{ scale: 1.04 }}
+              className="absolute -right-5 top-[28%] hidden w-48 rounded-2xl border border-border bg-background p-4 shadow-xl backdrop-blur-xl sm:block"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted">
+                  <MessageCircle className="h-4 w-4" />
+                </div>
+
+                <div>
+                  <p className="text-xs text-muted-foreground">Connection</p>
+
+                  <p className="text-sm font-medium">Direct contact</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Floating brokerage card */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                delay: 1.25,
+                duration: 0.6,
+                ease: "easeOut",
+              }}
+              whileHover={{ scale: 1.04 }}
+              className="absolute bottom-30 -left-5 hidden rounded-2xl border border-border bg-background p-4 shadow-xl backdrop-blur-xl sm:block"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted">
+                  <CircleDollarSign className="h-4 w-4" />
+                </div>
+
+                <div>
+                  <p className="text-xs text-muted-foreground">Brokerage</p>
+
+                  <p className="text-lg font-semibold">0%</p>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -266,9 +453,9 @@ export default function ServicesPage() {
             </h2>
 
             <p className="mt-6 max-w-lg leading-8 text-muted-foreground">
-              Renting involves more than finding a beautiful property.
-              Nestora connects the important steps so you can move through
-              the process with less friction.
+              Renting involves more than finding a beautiful property. Nestora
+              connects the important steps so you can move through the process
+              with less friction.
             </p>
           </motion.div>
 
@@ -339,7 +526,7 @@ export default function ServicesPage() {
                     ease: "easeOut",
                   }}
                   whileHover={{ y: -5 }}
-                  className="group border-b border-border p-8 transition-all duration-300 sm:[&:nth-child(odd)]:border-r lg:p-10"
+                  className="group border-b border-border p-8 transition-all duration-300 sm:odd:border-r lg:p-10"
                 >
                   <div className="flex items-start justify-between">
                     <motion.div
@@ -355,9 +542,7 @@ export default function ServicesPage() {
                     </span>
                   </div>
 
-                  <h3 className="mt-8 text-2xl font-medium">
-                    {service.title}
-                  </h3>
+                  <h3 className="mt-8 text-2xl font-medium">{service.title}</h3>
 
                   <p className="mt-3 max-w-md leading-7 text-muted-foreground">
                     {service.description}
@@ -421,9 +606,7 @@ export default function ServicesPage() {
                     <Icon className="h-5 w-5" />
                   </motion.div>
 
-                  <h3 className="mt-7 text-2xl font-medium">
-                    {service.title}
-                  </h3>
+                  <h3 className="mt-7 text-2xl font-medium">{service.title}</h3>
 
                   <p className="mt-3 leading-7 text-muted-foreground">
                     {service.description}
@@ -472,9 +655,7 @@ export default function ServicesPage() {
                   className="group flex items-center justify-between gap-6 border-b border-border py-7"
                 >
                   <div>
-                    <h3 className="text-xl font-medium">
-                      {feature.title}
-                    </h3>
+                    <h3 className="text-xl font-medium">{feature.title}</h3>
 
                     <p className="mt-2 text-sm text-muted-foreground">
                       {feature.text}
@@ -529,9 +710,7 @@ export default function ServicesPage() {
                   {step.number}
                 </span>
 
-                <h3 className="mt-12 text-2xl font-medium">
-                  {step.title}
-                </h3>
+                <h3 className="mt-12 text-2xl font-medium">{step.title}</h3>
 
                 <p className="mt-3 text-sm leading-7 text-muted-foreground">
                   {step.text}
@@ -591,9 +770,7 @@ export default function ServicesPage() {
                     <Icon className="h-5 w-5" />
                   </motion.div>
 
-                  <h3 className="mt-7 text-xl font-medium">
-                    {point.title}
-                  </h3>
+                  <h3 className="mt-7 text-xl font-medium">{point.title}</h3>
 
                   <p className="mt-2 text-sm leading-7 text-muted-foreground">
                     {point.text}

@@ -40,9 +40,83 @@ export type PaginatedProperties = {
    GET PAGINATED PROPERTIES
    ========================================================= */
 
+// export const getProperties = async (
+//   query: PropertyQuery = {},
+// ): Promise<PaginatedProperties> => {
+//   const params = new URLSearchParams();
+
+//   params.set("page", String(query.page ?? 1));
+//   params.set("limit", String(query.limit ?? 30));
+
+//   if (query.search) {
+//     params.set("search", query.search);
+//   }
+
+//   if (query.categoryId) {
+//     params.set("categoryId", query.categoryId);
+//   }
+
+//   if (query.availability) {
+//     params.set("availability", query.availability);
+//   }
+
+//   if (query.location) {
+//     params.set("location", query.location);
+//   }
+
+//   if (query.amenity) {
+//     params.set("amenity", query.amenity);
+//   }
+
+//   if (query.bedrooms) {
+//     params.set("bedrooms", String(query.bedrooms));
+//   }
+
+//   if (query.minRent) {
+//     params.set("minRent", query.minRent);
+//   }
+
+//   if (query.maxRent) {
+//     params.set("maxRent", query.maxRent);
+//   }
+
+//   if (query.sortBy) {
+//     params.set("sortBy", query.sortBy);
+//   }
+
+//   if (query.sortOrder) {
+//     params.set("sortOrder", query.sortOrder);
+//   }
+
+//   const res = await fetch(
+//     `${BASE_URL}/api/properties?${params.toString()}`,
+//     {
+//       cache: "no-store",
+//     },
+//   );
+
+//   if (!res.ok) {
+//     throw new Error("Failed to fetch properties");
+//   }
+
+//   const result = await res.json();
+
+//   return {
+//     properties: result.data.data,
+//     meta: result.data.meta,
+//   };
+// };
+
+
 export const getProperties = async (
   query: PropertyQuery = {},
 ): Promise<PaginatedProperties> => {
+  // Backend URL
+  const baseUrl =
+    process.env.BACKEND_API_URL ||
+    process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, "") ||
+    "http://localhost:5000";
+
   const params = new URLSearchParams();
 
   params.set("page", String(query.page ?? 1));
@@ -88,24 +162,45 @@ export const getProperties = async (
     params.set("sortOrder", query.sortOrder);
   }
 
-  const res = await fetch(
-    `${BASE_URL}/api/properties?${params.toString()}`,
-    {
-      cache: "no-store",
-    },
-  );
+  const url = `${baseUrl.replace(/\/$/, "")}/api/properties?${params.toString()}`;
+
+  const res = await fetch(url, {
+    cache: "no-store",
+  });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch properties");
+    const errorText = await res.text();
+
+    console.error("Nestora API Error:", {
+      url,
+      status: res.status,
+      statusText: res.statusText,
+      response: errorText,
+    });
+
+    throw new Error(
+      `Failed to fetch properties (${res.status})`,
+    );
   }
 
   const result = await res.json();
+
+  if (
+    !result?.data ||
+    !Array.isArray(result.data.data) ||
+    !result.data.meta
+  ) {
+    console.error("Invalid properties API response:", result);
+
+    throw new Error("Invalid properties API response");
+  }
 
   return {
     properties: result.data.data,
     meta: result.data.meta,
   };
 };
+
 
 /* =========================================================
    GET ALL PROPERTIES

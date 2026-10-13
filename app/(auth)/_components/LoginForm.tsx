@@ -8,24 +8,25 @@ import Link from "next/link";
 import { loginActions } from "../_actions/authActions";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 const LoginForm = () => {
   const [state, action, pending] = useActionState(loginActions, false);
+  const [showPassword, setShowPassword] = useState(false);
 
-useEffect(() => {
-  if (!state) return;
-  if (state.success) {
-    toast.success(state.message || "Login Successful!");
-    // router.push("/tenant-dashboard"); 
-  }
-  if (!state.success) {
-    toast.error(state.message || "Login Failed!");
-  }
-}, [state]);
+  useEffect(() => {
+    if (!state) return;
+    if (state.success) {
+      toast.success(state.message || "Login Successful!");
+      // router.push("/tenant-dashboard");
+    }
+    if (!state.success) {
+      toast.error(state.message || "Login Failed!");
+    }
+  }, [state]);
   return (
-    <form 
-    action={action}
-    className="w-full space-y-6">   
+    <form action={action} className="w-full space-y-6">
       <Card className="p-5 space-y-4">
         <div className="space-y-2">
           <label
@@ -38,7 +39,7 @@ useEffect(() => {
             <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground pointer-events-none" />
             <Input
               name="email"
-              type="email" 
+              type="email"
               placeholder="you@example.com"
               className="pl-10 h-11"
               required
@@ -57,11 +58,20 @@ useEffect(() => {
             <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground pointer-events-none" />
             <Input
               name="password"
-              type="password"
+              // type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               className="pl-10 h-11"
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
         </div>
 
@@ -70,9 +80,7 @@ useEffect(() => {
           className="w-full h-11 rounded-full font-semibold gap-2"
           disabled={pending}
         >
-          {
-            pending ? "Submitting..." : "Login"
-          }
+          {pending ? "Submitting..." : "Login"}
           <ArrowRight className="h-4 w-4" />
         </Button>
 

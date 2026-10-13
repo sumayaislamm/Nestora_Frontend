@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/select";
 import { KeyRound, Mail, Phone, UserRoundPen } from "lucide-react";
 import Link from "next/link";
-import React, { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { registerActions } from "../_actions/authActions";
 import { toast } from "sonner";
+
 
 const RegisterForm = () => {
   const [role, setRole] = useState("TENANT");

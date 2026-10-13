@@ -104,11 +104,6 @@ export const registerActions = async (
   });
   const result = await res.json();
 
-  // console.log(result);
-  // if (result.success) {
-  //   redirect("/login");
-  // }
-
   return result;
 };
 

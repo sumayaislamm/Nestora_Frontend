@@ -17,26 +17,13 @@ import { registerActions } from "../_actions/authActions";
 import { toast } from "sonner";
 
 const RegisterForm = () => {
-  // Image setting start
   const [role, setRole] = useState("TENANT");
-  // const [previewImage, setPreviewImage] = useState<string | null>(null);
-
-  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0];
-  //   if (file) {
-  //     setPreviewImage(URL.createObjectURL(file));
-  //   }
-  // };
-
-  // Image setting end
 
   const [state, action, pending] = useActionState(registerActions, false);
 
   useEffect(() => {
     if (!state) return;
-    // if (state.success) {
-    //   toast.success(state.message || "Registration Successful!");
-    // }
+
     if (state.success) {
       toast.success("Account created successfully!");
 
@@ -52,35 +39,6 @@ const RegisterForm = () => {
   return (
     <form action={action} className="space-y-4">
       <Card className="p-5 ">
-        {/* Profile Image */}
-        {/* <div className="flex flex-col items-center ">
-          <label
-            htmlFor="profileImage"
-            className="relative flex h-15 w-15 cursor-pointer items-center justify-center rounded-full border border-dashed bg-muted overflow-hidden"
-          >
-            {previewImage ? (
-              //  eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={previewImage}
-                alt="Profile preview"
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <ImagePlus className="h-6 w-6 text-muted-foreground" />
-            )}
-          </label>
-          <input
-            id="profileImage"
-            name="profileImage"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageChange}
-          />
-          <span className="text-xs text-muted-foreground">
-            Upload profile photo
-          </span>
-        </div> */}
         {/* Name  */}
         <div className="space-y-2">
           <label

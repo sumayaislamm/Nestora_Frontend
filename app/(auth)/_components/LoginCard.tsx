@@ -1,13 +1,22 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import React from "react";
 import LoginForm from "./LoginForm";
+import { demoLoginAction } from "../_actions/authActions";
+import { Button } from "@/components/ui/button";
 
 const LoginCard = () => {
-     // Card moving animation start
+  // Card moving animation start
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const dragRef = useRef({ dragging: false, startX: 0, startY: 0 });
+  const [pending, startTransition] = useTransition();
+
+  const handleDemoLogin = (role: string) => {
+    startTransition(async () => {
+      await demoLoginAction(role);
+    });
+  };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     dragRef.current = {
@@ -49,9 +58,40 @@ const LoginCard = () => {
           Enter your credentials to access your account
         </p>
       </div>
-
       {/* Form  */}
       <LoginForm />
+      <div className="space-y-2">
+        <p className="text-center text-sm text-muted-foreground">
+          Explore Nestora with a demo account
+        </p>
+
+        <Button
+          variant="outline"
+          className="w-full"
+          disabled={pending}
+          onClick={() => handleDemoLogin("TENANT")}
+        >
+          Demo Tenant
+        </Button>
+
+        <Button
+          variant="outline"
+          className="w-full"
+          disabled={pending}
+          onClick={() => handleDemoLogin("LANDLORD")}
+        >
+          Demo Landlord
+        </Button>
+
+        <Button
+          variant="outline"
+          className="w-full"
+          disabled={pending}
+          onClick={() => handleDemoLogin("ADMIN")}
+        >
+          Demo Admin
+        </Button>
+      </div>
     </div>
   );
 };

@@ -54,15 +54,12 @@ export const loginActions = async (
 
     if (decodedToken?.role === "TENANT") {
       redirect("/tenant-dashboard", "replace");
-    }
-    else if (decodedToken?.role === "LANDLORD") {
+    } else if (decodedToken?.role === "LANDLORD") {
       redirect("/landlord-dashboard", "replace");
-    }
-    else if (decodedToken?.role === "ADMIN") {
+    } else if (decodedToken?.role === "ADMIN") {
       redirect("/admin-dashboard", "replace");
-    }
-    else{
-      redirect("/")
+    } else {
+      redirect("/");
     }
   }
   return result;
@@ -88,14 +85,6 @@ export const registerActions = async (
   const role = formdata.get("role");
   const profileImage = formdata.get("profileImage");
 
-  // let profileImage: string | null = null;
-
-  // if (profileImageFile && profileImageFile.size > 0) {
-  //   const bytes = await profileImageFile.arrayBuffer();
-  //   const base64 = Buffer.from(bytes).toString("base64");
-  //   profileImage = `data:${profileImageFile.type};base64,${base64}`;
-  // }
-
   const payload: Record<string, unknown> = {
     name,
     email,
@@ -116,9 +105,48 @@ export const registerActions = async (
   const result = await res.json();
 
   // console.log(result);
-  if (result.success) {
-    redirect("/login");
-  }
+  // if (result.success) {
+  //   redirect("/login");
+  // }
 
   return result;
+};
+
+//Demo Login
+
+export const demoLoginAction = async (role: string) => {
+  const demoAccounts: Record<string, { email: string; password: string }> = {
+    TENANT: {
+      email: process.env.DEMO_TENANT_EMAIL!,
+      password: process.env.DEMO_TENANT_PASSWORD!,
+    },
+    LANDLORD: {
+      email: process.env.DEMO_LANDLORD_EMAIL!,
+      password: process.env.DEMO_LANDLORD_PASSWORD!,
+    },
+    ADMIN: {
+      email: process.env.DEMO_ADMIN_EMAIL!,
+      password: process.env.DEMO_ADMIN_PASSWORD!,
+    },
+  };
+
+  const account = demoAccounts[role];
+
+  if (!account) {
+    throw new Error("Invalid demo role");
+  }
+
+  const formData = new FormData();
+  formData.set("email", account.email);
+  formData.set("password", account.password);
+
+  return loginActions(
+    {
+      success: false,
+      statusCode: 0,
+      message: "",
+      data: { accessToken: "", refreshToken: "" },
+    },
+    formData,
+  );
 };

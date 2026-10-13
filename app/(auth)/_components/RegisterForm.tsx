@@ -34,8 +34,15 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (!state) return;
+    // if (state.success) {
+    //   toast.success(state.message || "Registration Successful!");
+    // }
     if (state.success) {
-      toast.success(state.message || "Registration Successful!");
+      toast.success("Account created successfully!");
+
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000);
     }
     if (!state.success) {
       toast.error(state.message || "Registration Failed!");
@@ -174,7 +181,7 @@ const RegisterForm = () => {
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={pending}> 
+        <Button type="submit" className="w-full" disabled={pending}>
           {pending ? "Submiting..." : "Register"}
         </Button>
 

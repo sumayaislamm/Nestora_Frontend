@@ -10,12 +10,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { KeyRound, Mail, Phone,SquareAsterisk, UserRoundPen } from "lucide-react";
+import {
+  KeyRound,
+  Mail,
+  Phone,
+  SquareAsterisk,
+  UserRoundPen,
+} from "lucide-react";
 import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
 import { registerActions } from "../_actions/authActions";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
+
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 
 const RegisterForm = () => {
   const [role, setRole] = useState("TENANT");
@@ -23,7 +32,7 @@ const RegisterForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [state, action, pending] = useActionState(registerActions, false);
-
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   useEffect(() => {
     if (!state) return;
 
@@ -40,7 +49,17 @@ const RegisterForm = () => {
   }, [state]);
 
   return (
-    <form action={action} className="space-y-4">
+    // <form action={action} className="space-y-4">
+    <form
+      action={action}
+      onSubmit={(e) => {
+        if (password !== confirmPassword) {
+          e.preventDefault();
+          toast.error("Passwords do not match!");
+        }
+      }}
+      className="space-y-5"
+    >
       <Card className="p-5 ">
         {/* Name  */}
         <div className="space-y-2">
@@ -130,7 +149,7 @@ const RegisterForm = () => {
             </button>
           </div>
         </div>
-         {/* confirm password */}
+        {/* confirm password */}
         <div className="space-y-2">
           <label
             htmlFor="confirmPassword"
@@ -143,7 +162,7 @@ const RegisterForm = () => {
             <SquareAsterisk className="absolute left-3 top-3 h-5 w-5 text-muted-foreground pointer-events-none" />
             <Input
               name="confirmPassword"
-              type={showPassword ? "text" : "password"}
+              type={showConfirmPassword ? "text" : "password"}
               placeholder="••••••••"
               className="pl-10 h-11"
               required
@@ -152,11 +171,13 @@ const RegisterForm = () => {
             />
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-label={
+                showConfirmPassword ? "Hide password" : "Show confirm password"
+              }
             >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
         </div>
@@ -179,6 +200,28 @@ const RegisterForm = () => {
               </SelectContent>
             </Select>
           </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Button type="button" variant="outline" className="h-11">
+            <FcGoogle size={20} />
+            Google
+          </Button>
+
+          <Button type="button" variant="outline" className="h-11">
+            <FaFacebookF size={18} className="text-[#1877F2]" />
+            Facebook
+          </Button>
+
+          <Button type="button" variant="outline" className="h-11">
+            <FaInstagram size={18} className="text-[#E4405F]" />
+            Instagram
+          </Button>
+
+          <Button type="button" variant="outline" className="h-11">
+            <FaLinkedinIn size={18} className="text-[#0A66C2]" />
+            LinkedIn
+          </Button>
         </div>
 
         <Button type="submit" className="w-full" disabled={pending}>

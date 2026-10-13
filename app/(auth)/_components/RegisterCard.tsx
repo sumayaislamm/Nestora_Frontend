@@ -1,52 +1,35 @@
+
 "use client";
-import React from "react";
-import { useEffect, useRef, useState } from "react";
+
+import { motion } from "framer-motion";
 import RegisterForm from "./RegisterForm";
 
 const RegisterCard = () => {
-  // Card moving animation start
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const dragRef = useRef({ dragging: false, startX: 0, startY: 0 });
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    dragRef.current = {
-      dragging: true,
-      startX: e.clientX - position.x,
-      startY: e.clientY - position.y,
-    };
-  };
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!dragRef.current.dragging) return;
-      setPosition({
-        x: e.clientX - dragRef.current.startX,
-        y: e.clientY - dragRef.current.startY,
-      });
-    };
-    const handleMouseUp = () => {
-      dragRef.current.dragging = false;
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [position]);
-  // Card moving animation end
   return (
-    <div
-      className=" rounded-lg border bg-accent shadow-lg cursor-grab active:cursor-grabbing relative z-10 lg:w-125 w-90 lg:px-8 p-3 "
-      style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
-      onMouseDown={handleMouseDown}
-    >
-      <div className=" text-center">
-        <h1 className="text-3xl font-bold">Create an Account</h1>
-        <p className="text-gray-500 mb-2">Fill in your details to get started</p>
-      </div>
+    <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-10">
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full max-w-md"
+      >
+        <div className="mb-6 text-center">
+          <h1 className="text-3xl font-bold tracking-tight">
+            Create your account
+          </h1>
+          <p className="mt-2 text-sm ">
+            Join Nestora and find your next space.
+          </p>
+        </div>
 
-      <RegisterForm />
+        <div className="rounded-2xl border border-border/70 bg-background/95 p-5 shadow-xl shadow-black/5 backdrop-blur-md sm:p-7">
+          <RegisterForm />
+        </div>
+
+        <p className="mt-5 text-center text-xs ">
+          Your next space starts here.
+        </p>
+      </motion.div>
     </div>
   );
 };

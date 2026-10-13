@@ -1,12 +1,13 @@
+
 import NestoraBackground from "../_components/NestoraBackground";
 import RegisterCard from "../_components/RegisterCard";
 
 function RegisterPage() {
   return (
-    <div className="bg-primary">
+    <main className="relative isolate min-h-screen overflow-hidden bg-primary">
       <NestoraBackground />
-      <RegisterCard></RegisterCard>
-    </div>
+      <RegisterCard />
+    </main>
   );
 }
 

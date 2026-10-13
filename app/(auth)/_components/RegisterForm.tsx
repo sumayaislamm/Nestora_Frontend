@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { KeyRound, Mail, Phone, Square, SquareAsterisk, UserRoundPen } from "lucide-react";
+import { KeyRound, Mail, Phone,SquareAsterisk, UserRoundPen } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
 import { registerActions } from "../_actions/authActions";
